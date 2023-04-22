@@ -2,6 +2,8 @@
 
 여기 레포지토리는 `스프링 부트 쇼핑몰 프로젝트 with JPA` 책을 공부한 코드입니다. <br />
 
+
+## 목차
 1장 : 개발환경 구축 <br/>
 2장 : Spring Data JPA <br/>
 3장 : Thymeleaf 학습 <br/>
