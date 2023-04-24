@@ -12,3 +12,10 @@
 6장 : 상품 등록 및 조회 <br/>
 7장 : 주문<br/>
 8장 : 장바구니
+
+## 사용기술
+1. SpringBoot
+2. Thymeleaf
+3. JPA
+4. MySQL
+5. SpringSecurity
