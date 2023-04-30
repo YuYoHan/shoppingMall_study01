@@ -1,0 +1,28 @@
+# 1. 워크플로의 이름 지정
+# 이 워크플로는 CI를 실행하기 위한 스크립트 모음이므로 ci로 지정
+name: CI
+
+# 2. 워크플로가 시작될 조건 지정
+# 워크플로를 시작할 트리거 조건을 지정합니다.
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    # 3. 실행 환경 지정
+    # 리눅스나 윈도우와 같은 실행 환경을 지정합니다.
+    runs-on: ubuntu-latest
+    # 4. 실행 스텝 지정
+    # 실행 스텝을 그룹화합니다.
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution : 'zulu'
+          java-version : '11'
+
+      - name : Grant execute permission for gradlew
+        run: chmod + x gradlew
+      - name : Build with Gradle
+        run: ./gradlew clean build
