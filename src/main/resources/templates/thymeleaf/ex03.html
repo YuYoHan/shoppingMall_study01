@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<table border="1">
+  <thead>
+  <tr>
+    <td>순번</td>
+    <td>상품명</td>
+    <td>상품설명</td>
+    <td>가격</td>
+    <td>상품등록일</td>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="item, status: ${itemList}">
+    <!--  인덱스가 짝수일 경우 status.even은 true가 됩니다.
+          즉, 현재 인덱스가 짝수라면 순번에 짝수가 출력됩니다.-->
+    <td th:if="${status.even}" th:text="짝수"></td>
+    <!-- 현재 인덱스가 짝수가 아닐 경우, 홀수면 홀수가 찍힌다.-->
+    <td th:unless="${status.even}" th:text="홀수"></td>
+    <td th:text="${item.itemNum}"></td>
+    <td th:text="${item.itemDetail}"></td>
+    <td th:text="${item.price}"></td>
+    <td th:text="${item.regTime}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
