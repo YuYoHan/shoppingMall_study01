@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>상품 데티어 출력</h1>
+<div>
+    상품명 : <span th:text="${item.getItemNum()}"></span>
+</div>
+<div>
+    상품상세 설명 : <span th:text="${item.getItemDetail()}"></span>
+</div>
+<div>
+    상품 등록일 : <span th:text="${item.regTime}"></span>
+</div>
+<div>
+    상품가격 : <span th:text="${item.getPrice()}"></span>
+</div>
+</body>
+</html>
