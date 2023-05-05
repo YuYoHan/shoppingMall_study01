@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1> 타임리프 링크처리</h1>
+<div>
+  <a th:href="@{/ex02}">예제2 페이지 이동</a>
+  <a th:href="@{https://www.naver.com}">네이버 이동</a>
+</div>
+<div>
+  <a th:href="@{/ex07(param1 ='파라미터 데이터1', param2 ='파라미터 데이터2')}">파라미터 전달</a>
+</div>
+</body>
+</html>
