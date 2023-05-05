@@ -39,10 +39,10 @@ public class SecurityConfig {
     // AuthenticationManagerBuilder가 AuthenticationManager를 생성합니다.
     // userDetailsService를 구현하고 있는 객체로 memberService를 지정해주며
     // 비밀번호 암호화를 위해 passwordEncoder를 지정해줍니다.
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationManagerBuilder builder) throws Exception {
-        return builder.userDetailsService(memberService).passwordEncoder(passwordEncoder()).and().build();
-    }
+//    @Bean
+//    AuthenticationManager authenticationManager(AuthenticationManagerBuilder builder) throws Exception {
+//        return builder.userDetailsService(memberService).passwordEncoder(passwordEncoder()).and().build();
+//    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
