@@ -3,7 +3,6 @@ package com.example.shoppingmall.entity;
 import com.example.shoppingmall.dto.MemberDTO;
 import com.example.shoppingmall.repository.CartRepository;
 import com.example.shoppingmall.repository.MemberRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
