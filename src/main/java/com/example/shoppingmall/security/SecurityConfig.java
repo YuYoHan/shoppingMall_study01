@@ -1,5 +1,6 @@
-package com.example.shoppingmall.config;
+package com.example.shoppingmall.security;
 
+import com.example.shoppingmall.config.CustomAuthenticationEntryPoint;
 import com.example.shoppingmall.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

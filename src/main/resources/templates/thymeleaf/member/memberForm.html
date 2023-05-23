@@ -27,7 +27,7 @@
 
 <div layout:fragment="content">
   <form action="/member/new" role="form" method="post"
-        th:object="${memberFormDTO}">
+        th:object="${memberFormDto}">
     <div class="form-group">
       <label th:for="name">이름</label>
       <input type="text" th:field="*{name}" class="form-control"
