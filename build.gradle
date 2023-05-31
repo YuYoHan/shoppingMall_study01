@@ -43,6 +43,7 @@ dependencies {
     // java.lang.NoClassDefFoundError (javax.annotation.Entity) 대응 코드
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {

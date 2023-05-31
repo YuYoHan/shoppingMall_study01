@@ -2,6 +2,8 @@ package com.example.shoppingmall.entity;
 
 import com.example.shoppingmall.constant.ItemSellStatus;
 import com.example.shoppingmall.repository.ItemRepository;
+import com.example.shoppingmall.repository.MemberRepository;
+import com.example.shoppingmall.repository.OrderItemRepository;
 import com.example.shoppingmall.repository.OrderRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +29,12 @@ class OrderTest {
     OrderRepository orderRepository;
 
     @Autowired
+    OrderItemRepository orderItemRepository;
+
+    @Autowired
+    MemberRepository memberRepository;
+
+    @Autowired
     ItemRepository itemRepository;
 
     @PersistenceContext
@@ -42,6 +50,27 @@ class OrderTest {
         item.setRegTime(LocalDateTime.now());
         item.setUpdateTime(LocalDateTime.now());
         return item;
+    }
+
+    public Order createOrder() {
+        Order order = new Order();
+
+        for (int i = 0; i < 3; i++) {
+            Item item = createItem();
+            itemRepository.save(item);
+            OrderItem orderItem = new OrderItem();
+            orderItem.setItem(item);
+            orderItem.setCount(10);
+            orderItem.setOrderPrice(1000);
+            orderItem.setOrder(order);
+            order.getOrderItems().add(orderItem);
+        }
+        MemberEntity member = new MemberEntity();
+        memberRepository.save(member);
+
+        order.setMember(member);
+        orderRepository.save(order);
+        return order;
     }
 
     @Test
@@ -72,4 +101,23 @@ class OrderTest {
                 .orElseThrow(EntityNotFoundException::new);
         Assertions.assertEquals(3, savedOrder.getOrderItems().size());
     }
+
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    public void lazyLoadingTest() {
+        Order order = this.createOrder();
+        Long orderItemId  = order.getOrderItems().get(0).getId();
+        em.flush();
+        em.clear();;
+
+        // 영속성 컨텍스트의 상태 초기화 후 order 엔티티에 저장했던 주문 상품 아이디를 이용하여
+        // orderItem을 데이터베이스에서 다시 조회합니다.
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(EntityNotFoundException::new);
+        orderItem.getOrder().getOrderDate();
+    }
+
+
+
+
 }
