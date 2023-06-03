@@ -6,14 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -27,6 +25,8 @@ class MemberEntityTest {
 
     @Test
     @DisplayName("Auditing 테스트")
+    // 스프링 시큐리티에서 제공하는 어노테이션으로 @WithMockUser에 지정한 사용자가
+    // 로그인한 상태라고 가정하고 테스트를 진행할 수 있습니다.
     @WithMockUser(username = "gildong", roles = "USER")
     public void auditingTest() {
         MemberEntity member = new MemberEntity();
