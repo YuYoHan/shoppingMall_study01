@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @Table(name="item")
-public class Item {
+public class Item extends BaseEntity {
 
     @Id
     @Column(name="item_id")
@@ -36,9 +36,4 @@ public class Item {
     @Enumerated(EnumType.STRING)
     // 상품 판매 상태
     private ItemSellStatus itemSellStatus;
-    // 등록 시간
-    // LocalDateTime 타입은 현재 로컬 컴퓨터의 날짜와 시간을 반환
-    private LocalDateTime regTime;
-    // 수정 시간
-    private LocalDateTime updateTime;
 }
