@@ -65,8 +65,6 @@
         사용자의 세션에 임의의 값을 저장하여 요청마다 그 값을 포함하여 전송하면 서버에서 세션에
         저장된 값과 요청이 온 값이 일치하는지 확인하여 CSRF를 방어합니다.-->
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-
-
   </form>
 </div>
 

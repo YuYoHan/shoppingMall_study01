@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @Setter
 @ToString
-public class MemberDTO {
+public class MemberFormDto {
     @NotBlank(message = "이메일은 필수 입력입니다.")
     private String name;
 

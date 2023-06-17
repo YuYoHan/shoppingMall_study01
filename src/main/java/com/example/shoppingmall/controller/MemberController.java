@@ -1,15 +1,14 @@
 package com.example.shoppingmall.controller;
 
-import com.example.shoppingmall.dto.MemberDTO;
-import com.example.shoppingmall.dto.UserDTO;
+import com.example.shoppingmall.dto.MemberFormDto;
+import com.example.shoppingmall.entity.MemberEntity;
 import com.example.shoppingmall.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class MemberController {
@@ -25,10 +24,17 @@ public class MemberController {
         return "member/memberLoginForm";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/member/new")
     public String memberForm(Model model) {
-        model.addAttribute("memberFormDto", new MemberDTO());
+        model.addAttribute("memberFormDto", new MemberFormDto());
         return "member/memberForm";
+    }
+
+    @PostMapping("/member/new")
+    public String memberForm(MemberFormDto memberFormDto) {
+        MemberEntity member = MemberEntity.createMember(memberFormDto, passwordEncoder);
+        memberService.saveMember(member);
+        return "redirect:/";
     }
 
 

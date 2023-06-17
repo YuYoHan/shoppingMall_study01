@@ -1,6 +1,6 @@
 package com.example.shoppingmall.entity;
 
-import com.example.shoppingmall.dto.MemberDTO;
+import com.example.shoppingmall.dto.MemberFormDto;
 import com.example.shoppingmall.repository.CartRepository;
 import com.example.shoppingmall.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -33,12 +33,12 @@ class CartTest {
 
     // 회원 엔티티를 생성하는 메소드
     public MemberEntity createMember() {
-        MemberDTO memberDTO = new MemberDTO();
-        memberDTO.setEmail("test@gamil.com");
-        memberDTO.setName("테스터");
-        memberDTO.setAddr("서울시 마포구 합정동");
-        memberDTO.setPassword("1234");
-        return MemberEntity.createMember(memberDTO, passwordEncoder);
+        MemberFormDto memberFormDto = new MemberFormDto();
+        memberFormDto.setEmail("test@gamil.com");
+        memberFormDto.setName("테스터");
+        memberFormDto.setAddr("서울시 마포구 합정동");
+        memberFormDto.setPassword("1234");
+        return MemberEntity.createMember(memberFormDto, passwordEncoder);
     }
 
     @Test
