@@ -1,6 +1,7 @@
 package com.example.shoppingmall.entity;
 
 import com.example.shoppingmall.constant.ItemSellStatus;
+import com.example.shoppingmall.entity.member.MemberEntity;
 import com.example.shoppingmall.repository.ItemRepository;
 import com.example.shoppingmall.repository.MemberRepository;
 import com.example.shoppingmall.repository.OrderItemRepository;
@@ -18,8 +19,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 
 import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")

@@ -1,0 +1,26 @@
+package com.example.shoppingmall.entity.member.embedded;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.persistence.Embeddable;
+
+// 임베디드 타입을 사용하려면 넣어야 한다.
+@Embeddable
+@ToString
+@Getter
+@NoArgsConstructor
+public class Address {
+    private String userAddr;
+    private String userAddrDetail;
+    private String userAddrEtc;
+
+    @Builder
+    public Address(String userAddr, String userAddrDetail, String userAddrEtc) {
+        this.userAddr = userAddr;
+        this.userAddrDetail = userAddrDetail;
+        this.userAddrEtc = userAddrEtc;
+    }
+}

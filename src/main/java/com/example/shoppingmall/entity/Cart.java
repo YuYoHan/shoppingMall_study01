@@ -1,5 +1,7 @@
 package com.example.shoppingmall.entity;
 
+import com.example.shoppingmall.entity.base.BaseEntity;
+import com.example.shoppingmall.entity.member.MemberEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "cart")
 @Getter @Setter
 @ToString
-public class Cart extends BaseEntity{
+public class Cart extends BaseEntity {
     @Id
     @Column(name = "cart_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

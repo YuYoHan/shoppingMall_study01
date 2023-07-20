@@ -1,5 +1,6 @@
 package com.example.shoppingmall.entity;
 
+import com.example.shoppingmall.entity.member.MemberEntity;
 import com.example.shoppingmall.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

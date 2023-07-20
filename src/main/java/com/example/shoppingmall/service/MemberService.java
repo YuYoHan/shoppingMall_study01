@@ -1,6 +1,6 @@
 package com.example.shoppingmall.service;
 
-import com.example.shoppingmall.entity.MemberEntity;
+import com.example.shoppingmall.entity.member.MemberEntity;
 import com.example.shoppingmall.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;

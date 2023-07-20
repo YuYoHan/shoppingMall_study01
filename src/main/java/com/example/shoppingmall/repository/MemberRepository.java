@@ -1,6 +1,6 @@
 package com.example.shoppingmall.repository;
 
-import com.example.shoppingmall.entity.MemberEntity;
+import com.example.shoppingmall.entity.member.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<MemberEntity, Long> {

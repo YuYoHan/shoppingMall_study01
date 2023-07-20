@@ -1,7 +1,7 @@
 package com.example.shoppingmall.controller;
 
 import com.example.shoppingmall.dto.MemberFormDto;
-import com.example.shoppingmall.entity.MemberEntity;
+import com.example.shoppingmall.entity.member.MemberEntity;
 import com.example.shoppingmall.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

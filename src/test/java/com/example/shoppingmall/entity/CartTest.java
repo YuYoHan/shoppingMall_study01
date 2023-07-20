@@ -1,6 +1,7 @@
 package com.example.shoppingmall.entity;
 
 import com.example.shoppingmall.dto.MemberFormDto;
+import com.example.shoppingmall.entity.member.MemberEntity;
 import com.example.shoppingmall.repository.CartRepository;
 import com.example.shoppingmall.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
