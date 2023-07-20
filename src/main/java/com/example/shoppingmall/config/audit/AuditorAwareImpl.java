@@ -1,4 +1,4 @@
-package com.example.shoppingmall.config;
+package com.example.shoppingmall.config.audit;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @ToString
 @Entity
 @Table(name="item")
@@ -18,7 +17,7 @@ public class Item extends BaseEntity {
 
     @Id
     @Column(name="item_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     // 상품코드
     private long id;
     @Column(nullable = false, length = 50)
