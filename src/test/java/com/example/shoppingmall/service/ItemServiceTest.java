@@ -1,11 +1,6 @@
 package com.example.shoppingmall.service;
 
 import com.example.shoppingmall.constant.ItemSellStatus;
-import com.example.shoppingmall.dto.ItemFormDTO;
-import com.example.shoppingmall.entity.Item;
-import com.example.shoppingmall.entity.ItemImg;
-import com.example.shoppingmall.repository.ItemImgRepository;
-import com.example.shoppingmall.repository.ItemRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

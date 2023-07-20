@@ -1,0 +1,162 @@
+package com.example.shoppingmall.service.member;
+
+import com.example.shoppingmall.config.jwt.JwtAuthenticationFilter;
+import com.example.shoppingmall.config.jwt.JwtProvider;
+import com.example.shoppingmall.dto.jwt.TokenDTO;
+import com.example.shoppingmall.dto.member.MemberDTO;
+import com.example.shoppingmall.entity.jwt.TokenEntity;
+import com.example.shoppingmall.entity.member.MemberEntity;
+import com.example.shoppingmall.entity.member.embedded.AddressEntity;
+import com.example.shoppingmall.repository.jwt.TokenRepository;
+import com.example.shoppingmall.repository.member.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+@Service
+// 비즈니스 로직을 담당하는 서비스 계층 클래스에
+// @Transactional 어노테이션을 선언합니다.
+// 로직을 처리하다가 에러가 발생하면
+// 변경된 데이터 로직을 처리하기 전으로 콜백해줍니다.
+@Transactional
+// 빈 주입 방법중 한 개인데
+// @NonNull 이나 final 붙은 필드에 생성자를 생성
+@RequiredArgsConstructor
+@Slf4j
+// MemberService가 UserDetailsService를 구현합니다.
+public class MemberService {
+
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final JwtProvider jwtProvider;
+    private final TokenRepository tokenRepository;
+
+    // 회원가입
+    public String signUp(MemberDTO memberDTO) throws Exception{
+        try {
+            MemberEntity findUser = memberRepository.findByUserEmail(memberDTO.getUserEmail());
+
+            if(findUser != null) {
+                return "이미 가입된 회원입니다.";
+            } else {
+                MemberEntity member = MemberEntity.builder()
+                        .userEmail(memberDTO.getUserEmail())
+                        .userPw(passwordEncoder.encode(memberDTO.getUserPw()))
+                        .userName(memberDTO.getUserName())
+                        .nickName(memberDTO.getNickName())
+                        .role(memberDTO.getRole())
+                        .address(AddressEntity.builder()
+                                .userAddr(memberDTO.getAddressDTO().getUserAddr())
+                                .userAddrDetail(memberDTO.getAddressDTO().getUserAddrDetail())
+                                .userAddrEtc(memberDTO.getAddressDTO().getUserAddrEtc())
+                                .build())
+                        .build();
+
+                log.info("member : " + member);
+                memberRepository.save(member);
+                return "회원가입에 성공했습니다.";
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw e; // 예외를 던져서 예외 처리를 컨트롤러로 전달
+        }
+    }
+
+    // 아이디 조회
+    public MemberDTO search(Long userId) {
+        Optional<MemberEntity> searchId = memberRepository.findById(userId);
+        MemberDTO memberDTO = MemberDTO.toMemberDTO(searchId);
+        return memberDTO;
+    }
+
+    // 로그인
+    public ResponseEntity<TokenDTO> login(String userEmail, String userPw) throws Exception {
+        MemberEntity findUser = memberRepository.findByUserEmail(userEmail);
+        log.info("user : " + findUser);
+
+        if(findUser != null) {
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userEmail, userPw);
+
+            TokenDTO token = jwtProvider.createToken(authentication);
+
+            token = TokenDTO.builder()
+                    .grantType(token.getGrantType())
+                    .accessToken(token.getAccessToken())
+                    .refreshToken(token.getRefreshToken())
+                    .userEmail(token.getUserEmail())
+                    .nickName(findUser.getNickName())
+                    .userId(findUser.getUserId())
+                    .accessTokenTime(token.getAccessTokenTime())
+                    .refreshTokenTime(token.getRefreshTokenTime())
+                    .build();
+
+            TokenEntity tokenEntity = TokenEntity.builder()
+                    .id(token.getId())
+                    .grantType(token.getGrantType())
+                    .accessToken(token.getAccessToken())
+                    .refreshToken(token.getRefreshToken())
+                    .userEmail(token.getUserEmail())
+                    .nickName(token.getNickName())
+                    .userId(token.getUserId())
+                    .accessTokenTime(token.getAccessTokenTime())
+                    .refreshTokenTime(token.getRefreshTokenTime())
+                    .build();
+
+            log.info("token : " + tokenEntity);
+
+            HttpHeaders headers = new HttpHeaders();
+            // response header에 jwt token을 넣어줌
+            headers.add(JwtAuthenticationFilter.HEADER_AUTHORIZATION, "Bearer " + token);
+
+            tokenRepository.save(tokenEntity);
+            return new ResponseEntity<>(token, headers, HttpStatus.OK);
+        } else {
+            return null;
+        }
+    }
+
+    // 회원정보 수정
+    public MemberDTO update(MemberDTO memberDTO) {
+
+        MemberEntity member = MemberEntity.builder()
+                .userEmail(memberDTO.getUserEmail())
+                .userPw(passwordEncoder.encode(memberDTO.getUserPw()))
+                .userName(memberDTO.getUserName())
+                .nickName(memberDTO.getNickName())
+                .role(memberDTO.getRole())
+                .address(AddressEntity.builder()
+                        .userAddr(memberDTO.getAddressDTO().getUserAddr())
+                        .userAddrDetail(memberDTO.getAddressDTO().getUserAddrDetail())
+                        .userAddrEtc(memberDTO.getAddressDTO().getUserAddrEtc())
+                        .build())
+                .build();
+
+        memberRepository.save(member);
+
+        // 제대로 DTO 값이 엔티티에 넣어졌는지 확인하기 위해서
+        // 엔티티에 넣어주고 다시 DTO 객체로 바꿔서 리턴을 해줬습니다.
+        MemberDTO memberDto = MemberDTO.toMemberDTO(Optional.of(member));
+        log.info("memberDto : " + memberDto);
+        return memberDto;
+    }
+
+    // 회원 삭제
+    public void delete(Long userId) {
+        memberRepository.deleteById(userId);
+    }
+}

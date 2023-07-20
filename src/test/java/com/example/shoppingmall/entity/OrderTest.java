@@ -2,10 +2,7 @@ package com.example.shoppingmall.entity;
 
 import com.example.shoppingmall.constant.ItemSellStatus;
 import com.example.shoppingmall.entity.member.MemberEntity;
-import com.example.shoppingmall.repository.ItemRepository;
-import com.example.shoppingmall.repository.MemberRepository;
-import com.example.shoppingmall.repository.OrderItemRepository;
-import com.example.shoppingmall.repository.OrderRepository;
+import com.example.shoppingmall.repository.member.MemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

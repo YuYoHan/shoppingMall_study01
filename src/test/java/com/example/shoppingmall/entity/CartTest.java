@@ -1,9 +1,7 @@
 package com.example.shoppingmall.entity;
 
-import com.example.shoppingmall.dto.MemberFormDto;
 import com.example.shoppingmall.entity.member.MemberEntity;
-import com.example.shoppingmall.repository.CartRepository;
-import com.example.shoppingmall.repository.MemberRepository;
+import com.example.shoppingmall.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
