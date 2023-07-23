@@ -41,12 +41,15 @@ public class MemberEntity extends BaseEntity {
     private AddressEntity address;
 
     @Builder
-    public MemberEntity(String userName,
+    public MemberEntity(
+            Long userId,
+            String userName,
                         String userEmail,
                         String userPw,
                         String nickName,
                         Role role,
                         AddressEntity address) {
+        this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPw = userPw;
