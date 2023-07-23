@@ -1,6 +1,6 @@
 package com.example.shoppingmall.entity;
 
-import com.example.shoppingmall.constant.ItemSellStatus;
+import com.example.shoppingmall.entity.item.ItemSellStatus;
 import com.example.shoppingmall.entity.member.MemberEntity;
 import com.example.shoppingmall.repository.member.MemberRepository;
 import org.junit.jupiter.api.Assertions;

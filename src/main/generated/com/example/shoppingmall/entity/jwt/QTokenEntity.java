@@ -33,6 +33,8 @@ public class QTokenEntity extends EntityPathBase<TokenEntity> {
 
     public final DateTimePath<java.util.Date> refreshTokenTime = createDateTime("refreshTokenTime", java.util.Date.class);
 
+    public final EnumPath<com.example.shoppingmall.dto.member.Role> role = createEnum("role", com.example.shoppingmall.dto.member.Role.class);
+
     public final StringPath userEmail = createString("userEmail");
 
     public final NumberPath<Long> userId = createNumber("userId", Long.class);

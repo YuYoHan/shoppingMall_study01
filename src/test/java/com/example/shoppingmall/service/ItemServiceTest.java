@@ -1,6 +1,6 @@
 package com.example.shoppingmall.service;
 
-import com.example.shoppingmall.constant.ItemSellStatus;
+import com.example.shoppingmall.entity.item.ItemSellStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

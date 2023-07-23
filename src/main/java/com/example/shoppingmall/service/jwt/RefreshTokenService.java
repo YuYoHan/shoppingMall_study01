@@ -87,7 +87,9 @@ public class RefreshTokenService {
         Role role = byUserEmail.getRole();  // 사용자의 권한 정보를 가져오는 로직 (예시)
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.name()));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" +role.name()));
+        log.info("role : " + role.name());
+        log.info("authorities : " + authorities);
         return authorities;
     }
 }

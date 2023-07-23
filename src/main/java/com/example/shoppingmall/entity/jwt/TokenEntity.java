@@ -1,5 +1,6 @@
 package com.example.shoppingmall.entity.jwt;
 
+import com.example.shoppingmall.dto.member.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
-@Entity
+@Entity(name = "token")
 @Getter
 @NoArgsConstructor
 @ToString
@@ -27,6 +28,7 @@ public class TokenEntity {
     private Long userId;
     private Date accessTokenTime;
     private Date refreshTokenTime;
+    private Role role;
 
 
     @Builder
@@ -38,7 +40,8 @@ public class TokenEntity {
                        String nickName,
                        Long userId,
                        Date accessTokenTime,
-                       Date refreshTokenTime) {
+                       Date refreshTokenTime,
+                       Role role) {
         this.id = id;
         this.grantType = grantType;
         this.accessToken = accessToken;
@@ -48,5 +51,6 @@ public class TokenEntity {
         this.userId = userId;
         this.accessTokenTime = accessTokenTime;
         this.refreshTokenTime = refreshTokenTime;
+        this.role = role;
     }
 }

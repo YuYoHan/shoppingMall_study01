@@ -91,8 +91,12 @@ public class MemberController {
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String token) throws Exception {
         try {
-            ResponseEntity<TokenDTO> accessToken = refreshTokenService.createAccessToken(token);
-            return ResponseEntity.ok().body(accessToken);
+            if(token != null) {
+                ResponseEntity<TokenDTO> accessToken = refreshTokenService.createAccessToken(token);
+                return ResponseEntity.ok().body(accessToken);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -121,9 +125,9 @@ public class MemberController {
     }
 
     // 회원 탈퇴
-    @GetMapping("/api/v1/users/{userId}")
+    @DeleteMapping("/api/v1/users/{userId}")
     public String remove(@PathVariable Long userId) {
-        memberService.delete(userId);
-        return "회원탈퇴 하셨습니다";
+        String delete = memberService.remove(userId);
+        return delete;
     }
 }

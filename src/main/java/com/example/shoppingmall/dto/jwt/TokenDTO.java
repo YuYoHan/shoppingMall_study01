@@ -1,12 +1,14 @@
 package com.example.shoppingmall.dto.jwt;
 
 
+import com.example.shoppingmall.dto.member.Role;
 import com.example.shoppingmall.entity.jwt.TokenEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.usertype.UserType;
 
 import java.util.Date;
 
@@ -24,6 +26,7 @@ public class TokenDTO {
     private Long userId;
     private Date accessTokenTime;
     private Date refreshTokenTime;
+    private Role role;
 
     @Builder
     public TokenDTO(Long id,
@@ -34,7 +37,8 @@ public class TokenDTO {
                     String nickName,
                     Long userId,
                     Date accessTokenTime,
-                    Date refreshTokenTime) {
+                    Date refreshTokenTime,
+                    Role role) {
         this.id = id;
         this.grantType = grantType;
         this.accessToken = accessToken;
@@ -44,20 +48,7 @@ public class TokenDTO {
         this.userId = userId;
         this.accessTokenTime = accessTokenTime;
         this.refreshTokenTime = refreshTokenTime;
+        this.role = role;
     }
 
-    public static TokenDTO toTokenDTO(TokenEntity tokenEntity) {
-        TokenDTO tokenDTO = TokenDTO.builder()
-                .grantType(tokenEntity.getGrantType())
-                .accessToken(tokenEntity.getAccessToken())
-                .refreshToken(tokenEntity.getRefreshToken())
-                .userEmail(tokenEntity.getUserEmail())
-                .nickName(tokenEntity.getNickName())
-                .userId(tokenEntity.getId())
-                .accessTokenTime(tokenEntity.getAccessTokenTime())
-                .refreshTokenTime(tokenEntity.getRefreshTokenTime())
-                .build();
-
-        return tokenDTO;
-    }
 }
