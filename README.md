@@ -1,6 +1,6 @@
 # ShoppingMall
 
-여기 레포지토리는 `스프링 부트 쇼핑몰 프로젝트 with JPA` 책을 공부한 코드입니다. REST 방식은 아닙니다.<br />
+여기 레포지토리는 `스프링 부트 쇼핑몰 프로젝트 with JPA` 책을 공부한 코드입니다. REST 방식으로 변경해서 만들 생각입니다.<br />
 
 
 ## 목차
@@ -15,7 +15,7 @@
 
 ## 사용기술
 1. SpringBoot
-2. Thymeleaf
-3. JPA
-4. MySQL
-5. SpringSecurity
+2. JPA
+3. MySQL
+4. SpringSecurity
+5. JWT
