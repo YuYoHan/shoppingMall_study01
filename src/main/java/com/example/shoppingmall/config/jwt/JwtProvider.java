@@ -191,10 +191,6 @@ public class JwtProvider {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
 
-        Object auth = claims.get("auth");
-        // [ROLE_USER]
-        log.info("auth in JwtProvider : " + auth);
-
         // 클레임 권한 정보 가져오기
         List<String> authorityStrings = (List<String>) claims.get(AUTHORITIES_KEY);
         // [ROLE_USER]
