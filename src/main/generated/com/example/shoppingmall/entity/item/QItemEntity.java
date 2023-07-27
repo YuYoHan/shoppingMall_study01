@@ -26,10 +26,18 @@ public class QItemEntity extends EntityPathBase<ItemEntity> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath itemDetail = createString("itemDetail");
+
     public final StringPath itemNum = createString("itemNum");
+
+    public final EnumPath<ItemSellStatus> itemSellStatus = createEnum("itemSellStatus", ItemSellStatus.class);
 
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
+
+    public final NumberPath<Integer> price = createNumber("price", Integer.class);
+
+    public final NumberPath<Integer> stockNumber = createNumber("stockNumber", Integer.class);
 
     public QItemEntity(String variable) {
         super(ItemEntity.class, forVariable(variable));

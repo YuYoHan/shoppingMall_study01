@@ -10,7 +10,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "member")
 @Getter
 @ToString
 @NoArgsConstructor
