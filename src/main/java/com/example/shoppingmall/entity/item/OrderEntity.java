@@ -11,6 +11,8 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "orders")
 @Table
@@ -32,6 +34,15 @@ public class OrderEntity extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;    // 주문 상태
+
+    // 외래키(order_id)가 order_item 테이블에 있으므로 연관 관계의 주인은
+    // OrderItemEntity 입니다. order 엔티티가 주인이 아니므로 "mappedBy"
+    // 속성으로 연관 관계의 주인을 설정합니다.
+    // 속성의 값으로 order 를 적어준 이유는 OrderItemEntity 에 있는 order에 의해
+    // 관리된다는 의미로 해석하면 됩니다.
+    @OneToMany(mappedBy = "order")
+    // 하나의 주문이 여러 개의 주문 상품을 갖으므로 List 자료형을 사용해서 매핑합니다.
+    private List<OrderItemEntity> orderItems = new ArrayList<>();
 
     @Builder
     public OrderEntity(Long id,

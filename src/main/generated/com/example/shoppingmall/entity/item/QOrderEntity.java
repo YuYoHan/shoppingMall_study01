@@ -30,6 +30,8 @@ public class QOrderEntity extends EntityPathBase<OrderEntity> {
 
     public final DateTimePath<java.time.LocalDateTime> orderDate = createDateTime("orderDate", java.time.LocalDateTime.class);
 
+    public final ListPath<OrderItemEntity, QOrderItemEntity> orderItems = this.<OrderItemEntity, QOrderItemEntity>createList("orderItems", OrderItemEntity.class, QOrderItemEntity.class, PathInits.DIRECT2);
+
     public final EnumPath<com.example.shoppingmall.dto.item.OrderStatus> orderStatus = createEnum("orderStatus", com.example.shoppingmall.dto.item.OrderStatus.class);
 
     //inherited
