@@ -38,19 +38,17 @@ public class SecurityConfig {
 
         http
                 .authorizeRequests()
-                .antMatchers("/api/v1/boards/write")
-                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/api/v1/boards/modify")
-                .access("hasRole('ROLE_USER')")
-                .antMatchers("/api/v1/boards/remove")
-                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/api/v1/admin/**")
-                .access("hasRole('ROLE_ADMIN')")
-                // /success-oauth 엔드포인트에 대해 인증된 사용자만 접근 가능하도록 설정
-//                .antMatchers("/success-oauth").authenticated()
-                .antMatchers("/swagger-resources/**").permitAll()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/api/v1/users/**").permitAll();
+                    .antMatchers("/api/v1/boards/**")
+                        .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                    .antMatchers("/api/v1/admin/**")
+                        .access("hasRole('ROLE_ADMIN')")
+                    .antMatchers("/api/v1/items/**")
+                        .access("hasRole('ROLE_ADMIN')")
+                    // /success-oauth 엔드포인트에 대해 인증된 사용자만 접근 가능하도록 설정
+//                  .antMatchers("/success-oauth").authenticated()
+                    .antMatchers("/swagger-resources/**").permitAll()
+                    .antMatchers("/swagger-ui/**").permitAll()
+                    .antMatchers("/api/v1/users/**").permitAll();
 
         http
                 .apply(new JwtSecurityConfig(jwtProvider));
