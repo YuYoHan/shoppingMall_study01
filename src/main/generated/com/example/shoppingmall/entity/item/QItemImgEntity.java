@@ -29,10 +29,6 @@ public class QItemImgEntity extends EntityPathBase<ItemImgEntity> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath imgName = createString("imgName");
-
-    public final StringPath imgUrl = createString("imgUrl");
-
     public final QItemEntity item;
 
     //inherited
@@ -40,7 +36,11 @@ public class QItemImgEntity extends EntityPathBase<ItemImgEntity> {
 
     public final StringPath oriImgName = createString("oriImgName");
 
-    public final StringPath repingYn = createString("repingYn");
+    public final StringPath uploadImgName = createString("uploadImgName");
+
+    public final StringPath uploadImgPath = createString("uploadImgPath");
+
+    public final StringPath uploadImgUrl = createString("uploadImgUrl");
 
     public QItemImgEntity(String variable) {
         this(ItemImgEntity.class, forVariable(variable), INITS);

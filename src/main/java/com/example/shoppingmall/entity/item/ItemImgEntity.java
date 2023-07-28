@@ -17,11 +17,10 @@ public class ItemImgEntity extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "item_img_id")
     private Long id;
-
-    private String imgName;             // 이미지 파일명
+    private String uploadImgPath;
+    private String uploadImgName;             // 이미지 파일명
     private String oriImgName;          // 원본 이미지 파일명
-    private String imgUrl;              // 이미지 조회 경로
-    private String repingYn;            // 대표 이미지 여부
+    private String uploadImgUrl;              // 이미지 조회 경로
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
@@ -29,24 +28,29 @@ public class ItemImgEntity extends BaseEntity {
 
     // 원본 이미지 파일명, 업데이트할 이미지 파일명, 이미지 경로 파라미터로 입력 받아서
     // 이미지 정보를 업데이트 하는 메소드입니다.
-    public void updateItemImg(String oriImgName, String imgName, String imgUrl) {
+    public void updateItemImg(String oriImgName,
+                              String uploadImgName,
+                              String uploadImgUrl,
+                              String uploadImgPath) {
         this.oriImgName = oriImgName;
-        this.imgName = imgName;
-        this.imgUrl = imgUrl;
+        this.uploadImgName = uploadImgName;
+        this.uploadImgUrl = uploadImgUrl;
+        this.uploadImgPath = uploadImgPath;
     }
 
     @Builder
+
     public ItemImgEntity(Long id,
-                         String imgName,
+                         String uploadImgPath,
+                         String uploadImgName,
                          String oriImgName,
-                         String imgUrl,
-                         String repingYn,
+                         String uploadImgUrl,
                          ItemEntity item) {
         this.id = id;
-        this.imgName = imgName;
+        this.uploadImgPath = uploadImgPath;
+        this.uploadImgName = uploadImgName;
         this.oriImgName = oriImgName;
-        this.imgUrl = imgUrl;
-        this.repingYn = repingYn;
+        this.uploadImgUrl = uploadImgUrl;
         this.item = item;
     }
 }

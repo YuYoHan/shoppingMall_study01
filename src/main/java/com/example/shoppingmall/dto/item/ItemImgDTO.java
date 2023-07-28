@@ -10,21 +10,21 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ItemImgDTO {
     private Long id;
-    private String imgName;
+    private String uploadImgName;
     private String oriImgName;
-    private String imgUrl;
-    private String repingYn;
+    private String uploadImgUrl;
+    private String uploadImgPath;
 
     @Builder
     public ItemImgDTO(Long id,
-                      String imgName,
+                      String uploadImgName,
                       String oriImgName,
-                      String imgUrl,
-                      String repingYn) {
+                      String uploadImgUrl,
+                      String uploadImgPath) {
         this.id = id;
-        this.imgName = imgName;
+        this.uploadImgName = uploadImgName;
         this.oriImgName = oriImgName;
-        this.imgUrl = imgUrl;
-        this.repingYn = repingYn;
+        this.uploadImgUrl = uploadImgUrl;
+        this.uploadImgPath = uploadImgPath;
     }
 }
