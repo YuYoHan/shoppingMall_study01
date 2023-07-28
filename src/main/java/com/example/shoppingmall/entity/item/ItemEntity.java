@@ -1,6 +1,8 @@
 package com.example.shoppingmall.entity.item;
 
+import com.example.shoppingmall.dto.item.ItemSellStatus;
 import com.example.shoppingmall.entity.base.BaseEntity;
+import com.example.shoppingmall.entity.base.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @ToString
 @NoArgsConstructor
-public class ItemEntity extends BaseEntity {
+public class ItemEntity extends BaseTimeEntity {
     @Id @GeneratedValue
     @Column(name = "item_id")
     private Long id;            // 상품 코드
@@ -30,6 +32,8 @@ public class ItemEntity extends BaseEntity {
     @Lob
     @Column(nullable = false)
     private String itemDetail;  // 상품 상세 설명
+
+    @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;  // 상품 판매 상태
 
     @Builder
