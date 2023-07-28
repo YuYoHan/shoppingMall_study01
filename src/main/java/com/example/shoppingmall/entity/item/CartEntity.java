@@ -20,7 +20,7 @@ public class CartEntity extends BaseTimeEntity {
     private Long id;
 
     // 일대일 매핑
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     // 매핑할 외래키를 지정합니다.
     // name 에는 매핑할 외래키의 이름을 설정
     @JoinColumn(name = "member_id")

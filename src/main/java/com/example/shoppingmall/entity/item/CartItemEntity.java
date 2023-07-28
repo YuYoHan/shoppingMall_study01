@@ -20,7 +20,7 @@ public class CartItemEntity extends BaseTimeEntity {
 
     // 하나의 장바구니에는 여러 개의 상품을 담을 수 있으므로
     // 다대일 관계를 맺어준다.
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private CartEntity cart;
 
@@ -28,7 +28,7 @@ public class CartItemEntity extends BaseTimeEntity {
     // 상품 엔티티에 연결해준다.
     // 하나의 상품은 여러 장바구니의 장바구니 상품으로
     // 담길 수 있으므로 다대일 관계를 맺어준다.
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private ItemEntity item;
 
