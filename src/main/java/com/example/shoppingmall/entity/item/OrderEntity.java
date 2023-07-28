@@ -40,7 +40,7 @@ public class OrderEntity extends BaseTimeEntity {
     // 속성으로 연관 관계의 주인을 설정합니다.
     // 속성의 값으로 order 를 적어준 이유는 OrderItemEntity 에 있는 order에 의해
     // 관리된다는 의미로 해석하면 됩니다.
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     // 하나의 주문이 여러 개의 주문 상품을 갖으므로 List 자료형을 사용해서 매핑합니다.
     private List<OrderItemEntity> orderItems = new ArrayList<>();
 
