@@ -8,7 +8,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-@Entity(name = "cartItem")
+@Entity(name = "cart_item")
 @ToString
 @Getter
 @NoArgsConstructor

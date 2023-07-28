@@ -22,6 +22,8 @@ public class OrderEntity extends BaseTimeEntity {
     @Column(name = "order_id")
     private Long id;
 
+    // 한명의 회원은 여러 번 주문을 할 수 있기 때문에
+    // 주문 엔티티 기준에서 다대일 단방향 매핑을 합니다.
     @ManyToOne
     @JoinColumn(name = "member_id")
     private MemberEntity member;
