@@ -26,11 +26,11 @@ public class QOrderItemEntity extends EntityPathBase<OrderItemEntity> {
 
     public final NumberPath<Integer> count = createNumber("count", Integer.class);
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final QItemEntity item;
 
     public final QOrderEntity order;
+
+    public final NumberPath<Long> orderItemId = createNumber("orderItemId", Long.class);
 
     public final NumberPath<Integer> orderPrice = createNumber("orderPrice", Integer.class);
 

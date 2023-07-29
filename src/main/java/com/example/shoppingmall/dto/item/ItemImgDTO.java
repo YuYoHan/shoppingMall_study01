@@ -37,13 +37,14 @@ public class ItemImgDTO {
 
     public static ItemImgDTO toItemDTO(ItemImgEntity itemImgEntity) {
         ItemImgDTO itemImgDTO = ItemImgDTO.builder()
+                .itemImgId(itemImgEntity.getItemImgId())
                 .oriImgName(itemImgEntity.getOriImgName())
                 .uploadImgName(itemImgEntity.getUploadImgName())
                 .uploadImgUrl(itemImgEntity.getUploadImgUrl())
                 .uploadImgPath(itemImgEntity.getUploadImgPath())
                 .repImgYn(itemImgEntity.getRepImgYn())
                 .item(ItemDTO.builder()
-                        .id(itemImgEntity.getItem().getItemId())
+                        .itemId(itemImgEntity.getItem().getItemId())
                         .itemNum(itemImgEntity.getItem().getItemNum())
                         .itemDetail(itemImgEntity.getItem().getItemDetail())
                         .itemSellStatus(itemImgEntity.getItem().getItemSellStatus())

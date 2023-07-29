@@ -1,5 +1,7 @@
 package com.example.shoppingmall.dto.item;
 
+import com.example.shoppingmall.entity.item.ItemEntity;
+import com.example.shoppingmall.entity.item.ItemImgEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,13 +33,7 @@ public class ItemDTO {
     // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트
     private List<ItemImgDTO> itemImgList = new ArrayList<>();
 
-    // 상품의 이미지 아이디를 저장하는 리스트입니다.
-    // 상품 등록 시에는 아직 상품의 이미지를 저장하지 않았기 때문에
-    // 아무 값도 들어가 있지 않고 수정 시에 이미지 아이디를 담아둘 용도로 사용합니다.
-    private List<Long> itemImgIds = new ArrayList<>();
-
     @Builder
-
     public ItemDTO(Long itemId,
                    String itemNum,
                    int price,
@@ -46,8 +42,8 @@ public class ItemDTO {
                    ItemSellStatus itemSellStatus,
                    LocalDateTime regTime,
                    LocalDateTime updateTime,
-                   List<ItemImgDTO> itemImgList,
-                   List<Long> itemImgIds) {
+                   List<ItemImgDTO> itemImgList
+                   ) {
         this.itemId = itemId;
         this.itemNum = itemNum;
         this.price = price;
@@ -57,6 +53,34 @@ public class ItemDTO {
         this.regTime = regTime;
         this.updateTime = updateTime;
         this.itemImgList = itemImgList;
-        this.itemImgIds = itemImgIds;
+    }
+
+    public static ItemDTO toItemDTO(ItemEntity item) {
+        List<ItemImgEntity> itemImgEntities = item.getItemImgList();
+        List<ItemImgDTO> itemDTOList = new ArrayList<>();
+
+        for(ItemImgEntity itemImgEntity : itemImgEntities) {
+            ItemImgDTO itemImgDTO = ItemImgDTO.builder()
+                    .oriImgName(itemImgEntity.getOriImgName())
+                    .uploadImgName(itemImgEntity.getUploadImgName())
+                    .uploadImgUrl(itemImgEntity.getUploadImgUrl())
+                    .uploadImgPath(itemImgEntity.getUploadImgPath())
+                    .repImgYn(itemImgEntity.getRepImgYn())
+                    .build();
+
+            itemDTOList.add(itemImgDTO);
+        }
+
+        return ItemDTO.builder()
+                .itemId(item.getItemId())
+                .itemNum(item.getItemNum())
+                .price(item.getPrice())
+                .stockNumber(item.getStockNumber())
+                .itemDetail(item.getItemDetail())
+                .itemSellStatus(item.getItemSellStatus())
+                .regTime(item.getRegTime())
+                .updateTime(item.getUpdateTime())
+                .itemImgList(itemDTOList) // 이미지 정보를 추가합니다.
+                .build();
     }
 }

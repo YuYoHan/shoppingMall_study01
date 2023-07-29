@@ -24,7 +24,7 @@ public class QCartEntity extends EntityPathBase<CartEntity> {
 
     public final com.example.shoppingmall.entity.base.QBaseTimeEntity _super = new com.example.shoppingmall.entity.base.QBaseTimeEntity(this);
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
+    public final NumberPath<Long> cartId = createNumber("cartId", Long.class);
 
     public final com.example.shoppingmall.entity.member.QMemberEntity member;
 

@@ -27,9 +27,9 @@ public class QItemImgEntity extends EntityPathBase<ItemImgEntity> {
     //inherited
     public final StringPath createBy = _super.createBy;
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final QItemEntity item;
+
+    public final NumberPath<Long> itemImgId = createNumber("itemImgId", Long.class);
 
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;

@@ -1,5 +1,6 @@
 package com.example.shoppingmall.entity.item;
 
+import com.example.shoppingmall.dto.item.ItemImgDTO;
 import com.example.shoppingmall.dto.item.ItemSellStatus;
 import com.example.shoppingmall.entity.base.BaseEntity;
 import com.example.shoppingmall.entity.base.BaseTimeEntity;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "item")
 @Getter
@@ -36,18 +39,25 @@ public class ItemEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;  // 상품 판매 상태
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
+    // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트
+    private List<ItemImgEntity> itemImgList = new ArrayList<>();
+
     @Builder
     public ItemEntity(Long itemId,
                       String itemNum,
                       int price,
                       int stockNumber,
                       String itemDetail,
-                      ItemSellStatus itemSellStatus) {
+                      ItemSellStatus itemSellStatus,
+                      List<ItemImgEntity> itemImgList
+                      ) {
         this.itemId = itemId;
         this.itemNum = itemNum;
         this.price = price;
         this.stockNumber = stockNumber;
         this.itemDetail = itemDetail;
         this.itemSellStatus = itemSellStatus;
+        this.itemImgList = itemImgList;
     }
 }

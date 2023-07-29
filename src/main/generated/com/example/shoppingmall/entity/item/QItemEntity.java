@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -21,9 +22,11 @@ public class QItemEntity extends EntityPathBase<ItemEntity> {
 
     public final com.example.shoppingmall.entity.base.QBaseTimeEntity _super = new com.example.shoppingmall.entity.base.QBaseTimeEntity(this);
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final StringPath itemDetail = createString("itemDetail");
+
+    public final NumberPath<Long> itemId = createNumber("itemId", Long.class);
+
+    public final ListPath<ItemImgEntity, QItemImgEntity> itemImgList = this.<ItemImgEntity, QItemImgEntity>createList("itemImgList", ItemImgEntity.class, QItemImgEntity.class, PathInits.DIRECT2);
 
     public final StringPath itemNum = createString("itemNum");
 

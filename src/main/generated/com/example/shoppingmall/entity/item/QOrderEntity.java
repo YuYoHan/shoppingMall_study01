@@ -24,11 +24,11 @@ public class QOrderEntity extends EntityPathBase<OrderEntity> {
 
     public final com.example.shoppingmall.entity.base.QBaseTimeEntity _super = new com.example.shoppingmall.entity.base.QBaseTimeEntity(this);
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final com.example.shoppingmall.entity.member.QMemberEntity member;
 
     public final DateTimePath<java.time.LocalDateTime> orderDate = createDateTime("orderDate", java.time.LocalDateTime.class);
+
+    public final NumberPath<Long> orderId = createNumber("orderId", Long.class);
 
     public final ListPath<OrderItemEntity, QOrderItemEntity> orderItems = this.<OrderItemEntity, QOrderItemEntity>createList("orderItems", OrderItemEntity.class, QOrderItemEntity.class, PathInits.DIRECT2);
 
