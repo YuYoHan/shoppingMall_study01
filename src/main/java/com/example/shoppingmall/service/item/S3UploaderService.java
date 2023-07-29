@@ -1,10 +1,12 @@
 package com.example.shoppingmall.service.item;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.shoppingmall.dto.item.ItemImgDTO;
+import com.example.shoppingmall.entity.item.ItemImgEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +23,7 @@ import java.util.*;
 @Service
 public class S3UploaderService {
 
-    private final AmazonS3Client amazonS3Client;
+    private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -46,7 +48,7 @@ public class S3UploaderService {
                 String keyName = uploadFilePath + "/" + uploadFileName;
 
                 // S3에 폴더 및 파일 업로드
-                amazonS3Client.putObject(
+                amazonS3.putObject(
                         new PutObjectRequest(bucket, keyName, inputStream, objectMetadata));
 
                 // TODO : 외부에 공개하는 파일인 경우 Public Read 권한을 추가, ACL 확인
@@ -55,7 +57,7 @@ public class S3UploaderService {
                         .withCannedAcl(CannedAccessControlList.PublicRead));*/
 
                 // S3에 업로드한 폴더 및 파일 URL
-                uploadFileUrl = amazonS3Client.getUrl(bucket, keyName).toString();
+                uploadFileUrl = amazonS3.getUrl(bucket, keyName).toString();
             } catch (IOException e) {
                 e.printStackTrace();
                 log.error("Filed upload failed", e);
@@ -68,6 +70,7 @@ public class S3UploaderService {
                             .uploadImgPath(uploadFilePath)
                             .uploadImgUrl(uploadFileUrl)
                             .build());
+
         }
         return s3files;
     }
@@ -79,10 +82,10 @@ public class S3UploaderService {
         try {
             // ex) 구분/년/월/일/파일.확장자
             String keyName = uploadFilePath + "/" + uuidFileName;
-            boolean isObjectExist = amazonS3Client.doesObjectExist(bucket, keyName);
+            boolean isObjectExist = amazonS3.doesObjectExist(bucket, keyName);
 
             if(isObjectExist) {
-                amazonS3Client.deleteObject(bucket, keyName);
+                amazonS3.deleteObject(bucket, keyName);
             } else {
                 result = "file not found";
             }
