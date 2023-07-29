@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class ItemDTO {
-    private Long id;            // 상품 코드
+    private Long itemId;            // 상품 코드
     @NotBlank(message = "상품명은 필수 입력입니다.")
     private String itemNum;     // 상품 명
     @NotNull(message = "가격은 필수 입력입니다.")
@@ -38,7 +38,7 @@ public class ItemDTO {
 
     @Builder
 
-    public ItemDTO(Long id,
+    public ItemDTO(Long itemId,
                    String itemNum,
                    int price,
                    int stockNumber,
@@ -48,7 +48,7 @@ public class ItemDTO {
                    LocalDateTime updateTime,
                    List<ItemImgDTO> itemImgList,
                    List<Long> itemImgIds) {
-        this.id = id;
+        this.itemId = itemId;
         this.itemNum = itemNum;
         this.price = price;
         this.stockNumber = stockNumber;

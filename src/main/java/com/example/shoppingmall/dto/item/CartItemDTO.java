@@ -9,14 +9,17 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 public class CartItemDTO {
-    private Long id;
+    private Long cartItemId;
     private CartDTO cart;
     private ItemDTO item;
     private int count;
 
     @Builder
-    public CartItemDTO(Long id, CartDTO cart, ItemDTO item, int count) {
-        this.id = id;
+    public CartItemDTO(Long cartItemId,
+                       CartDTO cart,
+                       ItemDTO item,
+                       int count) {
+        this.cartItemId = cartItemId;
         this.cart = cart;
         this.item = item;
         this.count = count;

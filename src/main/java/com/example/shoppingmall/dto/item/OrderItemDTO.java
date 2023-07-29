@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class OrderItemDTO {
-    private Long id;
+    private Long orderItemId;
     private ItemDTO item;
     private OrderDTO order;
     private int price;
@@ -20,14 +20,14 @@ public class OrderItemDTO {
     private LocalDateTime updateTime;
 
     @Builder
-    public OrderItemDTO(Long id,
+    public OrderItemDTO(Long orderItemId,
                         ItemDTO item,
                         OrderDTO order,
                         int price,
                         int count,
                         LocalDateTime regTime,
                         LocalDateTime updateTime) {
-        this.id = id;
+        this.orderItemId = orderItemId;
         this.item = item;
         this.order = order;
         this.price = price;

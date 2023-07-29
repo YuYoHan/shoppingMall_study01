@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class ItemImgEntity extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "item_img_id")
-    private Long id;
+    private Long itemImgId;
     private String uploadImgPath;
     private String uploadImgName;               // 이미지 파일명
     private String oriImgName;                  // 원본 이미지 파일명
@@ -43,14 +43,14 @@ public class ItemImgEntity extends BaseEntity {
     }
 
     @Builder
-    public ItemImgEntity(Long id,
+    public ItemImgEntity(Long itemImgId,
                          String uploadImgPath,
                          String uploadImgName,
                          String oriImgName,
                          String uploadImgUrl,
                          ItemEntity item,
                          String repImgYn) {
-        this.id = id;
+        this.itemImgId = itemImgId;
         this.uploadImgPath = uploadImgPath;
         this.uploadImgName = uploadImgName;
         this.oriImgName = oriImgName;

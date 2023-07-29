@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class ItemImgDTO {
-    private Long id;
+    private Long itemImgId;
     private String uploadImgName;
     private String oriImgName;
     private String uploadImgUrl;
@@ -19,14 +19,14 @@ public class ItemImgDTO {
     private ItemDTO item;
 
     @Builder
-    public ItemImgDTO(Long id,
+    public ItemImgDTO(Long itemImgId,
                       String uploadImgName,
                       String oriImgName,
                       String uploadImgUrl,
                       String uploadImgPath,
                       String repImgYn,
                       ItemDTO item) {
-        this.id = id;
+        this.itemImgId = itemImgId;
         this.uploadImgName = uploadImgName;
         this.oriImgName = oriImgName;
         this.uploadImgUrl = uploadImgUrl;
@@ -43,7 +43,7 @@ public class ItemImgDTO {
                 .uploadImgPath(itemImgEntity.getUploadImgPath())
                 .repImgYn(itemImgEntity.getRepImgYn())
                 .item(ItemDTO.builder()
-                        .id(itemImgEntity.getItem().getId())
+                        .id(itemImgEntity.getItem().getItemId())
                         .itemNum(itemImgEntity.getItem().getItemNum())
                         .itemDetail(itemImgEntity.getItem().getItemDetail())
                         .itemSellStatus(itemImgEntity.getItem().getItemSellStatus())

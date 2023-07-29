@@ -23,7 +23,7 @@ public class OrderEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name = "order_id")
-    private Long id;
+    private Long orderId;
 
     // 한명의 회원은 여러 번 주문을 할 수 있기 때문에
     // 주문 엔티티 기준에서 다대일 단방향 매핑을 합니다.
@@ -48,14 +48,17 @@ public class OrderEntity extends BaseTimeEntity {
     // 하나의 주문이 여러 개의 주문 상품을 갖으므로 List 자료형을 사용해서 매핑합니다.
     private List<OrderItemEntity> orderItems = new ArrayList<>();
 
+
     @Builder
-    public OrderEntity(Long id,
+    public OrderEntity(Long orderId,
                        MemberEntity member,
                        LocalDateTime orderDate,
-                       OrderStatus orderStatus) {
-        this.id = id;
+                       OrderStatus orderStatus,
+                       List<OrderItemEntity> orderItems) {
+        this.orderId = orderId;
         this.member = member;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
+        this.orderItems = orderItems;
     }
 }

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 public class OrderDTO {
-    private Long id;
+    private Long orderId;
     private MemberDTO member;
     private LocalDateTime orderDate;
     private OrderStatus orderStatus;
@@ -20,13 +20,13 @@ public class OrderDTO {
     private LocalDateTime updateTime;
 
     @Builder
-    public OrderDTO(Long id,
+    public OrderDTO(Long orderId,
                     MemberDTO member,
                     LocalDateTime orderDate,
                     OrderStatus orderStatus,
                     LocalDateTime regTime,
                     LocalDateTime updateTime) {
-        this.id = id;
+        this.orderId = orderId;
         this.member = member;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;

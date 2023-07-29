@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class OrderItemEntity extends BaseTimeEntity {
     @Id @GeneratedValue
     @Column(name = "order_item_id")
-    private Long id;
+    private Long orderItemId;
 
     // 하나의 상품은 여러 주문 상품으로 들어갈 수 있으므로
     // 주문 상품 기준으로 다대일 단방향 매핑을 한다.
@@ -34,12 +34,12 @@ public class OrderItemEntity extends BaseTimeEntity {
     private int count;
 
     @Builder
-    public OrderItemEntity(Long id,
+    public OrderItemEntity(Long orderItemId,
                            ItemEntity item,
                            OrderEntity order,
                            int orderPrice,
                            int count) {
-        this.id = id;
+        this.orderItemId = orderItemId;
         this.item = item;
         this.order = order;
         this.orderPrice = orderPrice;

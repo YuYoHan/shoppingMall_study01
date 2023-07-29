@@ -10,12 +10,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 public class CartDTO {
-    private Long id;
+    private Long cartId;
     private MemberDTO member;
 
     @Builder
-    public CartDTO(Long id, MemberDTO member) {
-        this.id = id;
+    public CartDTO(Long cartId, MemberDTO member) {
+        this.cartId = cartId;
         this.member = member;
     }
 }

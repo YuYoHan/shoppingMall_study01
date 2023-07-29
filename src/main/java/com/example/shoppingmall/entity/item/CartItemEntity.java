@@ -2,6 +2,7 @@ package com.example.shoppingmall.entity.item;
 
 import com.example.shoppingmall.entity.base.BaseEntity;
 import com.example.shoppingmall.entity.base.BaseTimeEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -16,7 +17,7 @@ import javax.persistence.*;
 public class CartItemEntity extends BaseTimeEntity {
     @Id @GeneratedValue
     @Column(name = "cart_item_id")
-    private Long id;
+    private Long cartItemId;
 
     // 하나의 장바구니에는 여러 개의 상품을 담을 수 있으므로
     // 다대일 관계를 맺어준다.
@@ -34,4 +35,12 @@ public class CartItemEntity extends BaseTimeEntity {
 
     // 같은상품을 장바구니에 몇 개 담을지 저장합니다.
     private int count;
+
+    @Builder
+    public CartItemEntity(Long cartItemId, CartEntity cart, ItemEntity item, int count) {
+        this.cartItemId = cartItemId;
+        this.cart = cart;
+        this.item = item;
+        this.count = count;
+    }
 }

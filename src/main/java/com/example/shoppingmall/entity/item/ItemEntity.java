@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class ItemEntity extends BaseTimeEntity {
     @Id @GeneratedValue
     @Column(name = "item_id")
-    private Long id;            // 상품 코드
+    private Long itemId;            // 상품 코드
     @Column(nullable = false, length = 50)
     private String itemNum;     // 상품 명
     @Column(name = "price", nullable = false)
@@ -37,13 +37,13 @@ public class ItemEntity extends BaseTimeEntity {
     private ItemSellStatus itemSellStatus;  // 상품 판매 상태
 
     @Builder
-    public ItemEntity(Long id,
+    public ItemEntity(Long itemId,
                       String itemNum,
                       int price,
                       int stockNumber,
                       String itemDetail,
                       ItemSellStatus itemSellStatus) {
-        this.id = id;
+        this.itemId = itemId;
         this.itemNum = itemNum;
         this.price = price;
         this.stockNumber = stockNumber;
