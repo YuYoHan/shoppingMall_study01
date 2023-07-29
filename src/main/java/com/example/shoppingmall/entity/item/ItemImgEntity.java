@@ -18,9 +18,11 @@ public class ItemImgEntity extends BaseEntity {
     @Column(name = "item_img_id")
     private Long id;
     private String uploadImgPath;
-    private String uploadImgName;             // 이미지 파일명
-    private String oriImgName;          // 원본 이미지 파일명
-    private String uploadImgUrl;              // 이미지 조회 경로
+    private String uploadImgName;               // 이미지 파일명
+    private String oriImgName;                  // 원본 이미지 파일명
+    private String uploadImgUrl;                // 이미지 조회 경로
+    private String repImgYn;                    // 대표 이미지 여부 Y면 대표이미지를 보여줌
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
@@ -31,26 +33,29 @@ public class ItemImgEntity extends BaseEntity {
     public void updateItemImg(String oriImgName,
                               String uploadImgName,
                               String uploadImgUrl,
-                              String uploadImgPath) {
+                              String uploadImgPath,
+                              String repImgYn) {
         this.oriImgName = oriImgName;
         this.uploadImgName = uploadImgName;
         this.uploadImgUrl = uploadImgUrl;
         this.uploadImgPath = uploadImgPath;
+        this.repImgYn = repImgYn;
     }
 
     @Builder
-
     public ItemImgEntity(Long id,
                          String uploadImgPath,
                          String uploadImgName,
                          String oriImgName,
                          String uploadImgUrl,
-                         ItemEntity item) {
+                         ItemEntity item,
+                         String repImgYn) {
         this.id = id;
         this.uploadImgPath = uploadImgPath;
         this.uploadImgName = uploadImgName;
         this.oriImgName = oriImgName;
         this.uploadImgUrl = uploadImgUrl;
         this.item = item;
+        this.repImgYn = repImgYn;
     }
 }

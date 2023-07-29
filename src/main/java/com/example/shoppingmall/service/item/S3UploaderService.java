@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.shoppingmall.dto.item.ItemImgDTO;
 import com.example.shoppingmall.entity.item.ItemImgEntity;
+import com.example.shoppingmall.repository.item.ItemImgRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,12 +24,20 @@ import java.util.*;
 @Service
 public class S3UploaderService {
 
-    private final AmazonS3 amazonS3;
-
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    private final AmazonS3 amazonS3;
+
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
+    // String fileType는 파일 업로드 시 업로드할 파일들을
+    // 어떤 종류 또는 구분으로 분류하고 저장할지를 지정하는 매개변수입니다.
+    // 쇼핑몰 프로젝트에서는 보통 상품 이미지들을 업로드하게 되는데,
+    // fileType을 사용하여 해당 상품 이미지들을 어떤 카테고리 또는 폴더에 저장할지를 결정할 수 있습니다.
+    // 예를 들어, fileType이 "product"인 경우,
+    // 상품 이미지들은 "product/년/월/일"과 같은 경로에 업로드될 수 있습니다.
+    // 이렇게 파일을 업로드할 경로를 fileType을 기반으로 동적으로
+    // 결정하는 것은 이미지 관리 및 구분에 도움이 되며, 폴더를 체계적으로 구성하여 관리할 수 있습니다.
     public List<ItemImgDTO> upload(String fileType, List<MultipartFile> multipartFiles) throws IOException {
         List<ItemImgDTO> s3files = new ArrayList<>();
 
@@ -70,7 +79,6 @@ public class S3UploaderService {
                             .uploadImgPath(uploadFilePath)
                             .uploadImgUrl(uploadFileUrl)
                             .build());
-
         }
         return s3files;
     }
@@ -84,7 +92,7 @@ public class S3UploaderService {
             String keyName = uploadFilePath + "/" + uuidFileName;
             boolean isObjectExist = amazonS3.doesObjectExist(bucket, keyName);
 
-            if(isObjectExist) {
+            if (isObjectExist) {
                 amazonS3.deleteObject(bucket, keyName);
             } else {
                 result = "file not found";
@@ -94,7 +102,6 @@ public class S3UploaderService {
         }
         return result;
     }
-
 
 
     // UUID 파일명 반환

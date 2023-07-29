@@ -36,6 +36,8 @@ public class QItemImgEntity extends EntityPathBase<ItemImgEntity> {
 
     public final StringPath oriImgName = createString("oriImgName");
 
+    public final StringPath repImgYn = createString("repImgYn");
+
     public final StringPath uploadImgName = createString("uploadImgName");
 
     public final StringPath uploadImgPath = createString("uploadImgPath");
