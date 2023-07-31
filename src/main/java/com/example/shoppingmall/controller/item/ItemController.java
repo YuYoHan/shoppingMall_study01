@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -23,6 +24,7 @@ public class ItemController {
 
     private final ItemService itemService;
 
+    // 상품 등록
     @PostMapping("/")
     public ResponseEntity<?> insertItem(@Validated @RequestBody ItemDTO itemDTO,
                                         List<MultipartFile> itemImages,
@@ -44,6 +46,18 @@ public class ItemController {
         } catch (Exception e) {
             log.info("에러 발생했습니다.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    // 상품 조회
+    @GetMapping("/{itemId}")
+    public ResponseEntity<?> itemDetail(@PathVariable Long itemId) {
+        try {
+            ResponseEntity<ItemDTO> item = itemService.getItem(itemId);
+            return ResponseEntity.ok().body(item);
+        } catch (EntityNotFoundException e) {
+            log.info("존재하지 않는 상품입니다.");
+            return ResponseEntity.notFound().build();
         }
     }
 

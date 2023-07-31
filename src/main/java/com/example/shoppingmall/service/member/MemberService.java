@@ -284,4 +284,15 @@ public class MemberService {
         }
     }
 
+    // 이메일 중복 체크
+    public String emailCheck(String userEmail) {
+        MemberEntity findUser = memberRepository.findByUserEmail(userEmail);
+
+        if(findUser == null) {
+            return "회원가입이 가능합니다.";
+        } else {
+            return "중복된 회원입니다.";
+        }
+    }
+
 }

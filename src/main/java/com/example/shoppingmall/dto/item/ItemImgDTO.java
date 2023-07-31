@@ -1,6 +1,7 @@
 package com.example.shoppingmall.dto.item;
 
 import com.example.shoppingmall.entity.item.ItemImgEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,12 +11,25 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class ItemImgDTO {
+    @Schema(description = "상품 이미지 번호")
     private Long itemImgId;
+
+    @Schema(description = "상품 업로드 이름")
     private String uploadImgName;
+
+    @Schema(description = "원본 상품 이름")
     private String oriImgName;
+
+    @Schema(description = "업로드 이미지 URL")
     private String uploadImgUrl;
+
+    @Schema(description = "업로드 이미지 Path")
     private String uploadImgPath;
+
+    @Schema(description = "대표 이미지 여부")
     private String repImgYn;
+
+    @Schema(description = "상품 정보")
     private ItemDTO item;
 
     @Builder

@@ -66,13 +66,13 @@ public class ItemService {
                         .repImgYn("N")
                         .build();
             }
+            itemImgRepository.save(itemImg);
 
             item = ItemEntity.builder()
                     .itemImgList((List<ItemImgEntity>) itemImg)
                     .build();
 
             ItemEntity itemSave = itemRepository.save(item);
-            itemImgRepository.save(itemImg);
             savedItem.add(ItemDTO.toItemDTO(itemSave));
         }
 

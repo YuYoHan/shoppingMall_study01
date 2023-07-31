@@ -2,6 +2,7 @@ package com.example.shoppingmall.dto.item;
 
 import com.example.shoppingmall.entity.item.ItemEntity;
 import com.example.shoppingmall.entity.item.ItemImgEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,17 +18,32 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class ItemDTO {
+    @Schema(description = "상품 번호")
     private Long itemId;            // 상품 코드
+
+    @Schema(description = "상품 이름")
     @NotBlank(message = "상품명은 필수 입력입니다.")
     private String itemNum;     // 상품 명
+
+    @Schema(description = "상품 가격")
     @NotNull(message = "가격은 필수 입력입니다.")
     private int price;          // 가격
+
+    @Schema(description = "상품 재고 수량")
     @NotNull(message = "재고 수량은 필수 입력입니다.")
     private int stockNumber;    // 재고수량
+
+    @Schema(description = "상품 설명")
     @NotNull(message = "설명은 필수 입력입니다.")
     private String itemDetail;  // 상품 상세 설명
+
+    @Schema(description = "상품 상태")
     private ItemSellStatus itemSellStatus;  // 상품 판매 상태
+
+    @Schema(description = "상품 등록 시간")
     private LocalDateTime regTime;
+
+    @Schema(description = "상품 업데이트 시간")
     private LocalDateTime updateTime;
 
     // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트

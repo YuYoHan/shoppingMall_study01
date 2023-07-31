@@ -2,6 +2,7 @@ package com.example.shoppingmall.dto.jwt;
 
 
 import com.example.shoppingmall.dto.member.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,14 +17,24 @@ import java.util.Date;
 public class TokenDTO {
     @JsonIgnore
     private Long id;
+
+    @Schema(description = "토큰 타입")
     private String grantType;
+    @Schema(description = "access token")
     private String accessToken;
+    @Schema(description = "refresh token")
     private String refreshToken;
+    @Schema(description = "회원 이메일")
     private String userEmail;
+    @Schema(description = "닉네임")
     private String nickName;
+    @Schema(description = "유저 번호")
     private Long userId;
+    @Schema(description = "access token 발급 시간")
     private Date accessTokenTime;
+    @Schema(description = "refresh token 발급 시간")
     private Date refreshTokenTime;
+    @Schema(description = "유저 권한")
     private Role role;
 
     @Builder

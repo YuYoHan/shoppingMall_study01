@@ -59,4 +59,6 @@ public class ItemImgEntity extends BaseEntity {
         this.repImgYn = repImgYn;
     }
 
+
+
 }
