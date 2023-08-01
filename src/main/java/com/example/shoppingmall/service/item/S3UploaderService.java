@@ -2,6 +2,7 @@ package com.example.shoppingmall.service.item;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -97,8 +98,14 @@ public class S3UploaderService {
             } else {
                 result = "file not found";
             }
+        } catch (AmazonS3Exception e) {
+            // S3에서 파일 삭제 실패
+            result = "S3 file deletion failed: " + e.getMessage();
+            log.error("S3 file deletion failed", e);
         } catch (Exception e) {
-            log.debug("Delete File failed", e);
+            // 기타 예외 처리
+            result = "file deletion failed: " + e.getMessage();
+            log.error("File deletion failed", e);
         }
         return result;
     }

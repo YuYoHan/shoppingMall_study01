@@ -2,6 +2,7 @@ package com.example.shoppingmall.controller.item;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.example.shoppingmall.dto.item.ItemDTO;
+import com.example.shoppingmall.dto.item.ItemImgDTO;
 import com.example.shoppingmall.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +30,12 @@ public class ItemController {
     public ResponseEntity<?> insertItem(@Validated @RequestBody ItemDTO itemDTO,
                                         List<MultipartFile> itemImages,
                                         BindingResult result) throws Exception {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             log.info("BindingResult error : " + result.hasErrors());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getClass().getSimpleName());
         }
 
-        if(itemImages.get(0).isEmpty()) {
+        if (itemImages.get(0).isEmpty()) {
             log.info("첫 번째 상품 이미지는 필 수 입력입니다.");
             return ResponseEntity.notFound().build();
         }
@@ -49,7 +50,7 @@ public class ItemController {
         }
     }
 
-    // 상품 조회
+    // 상품 상세 정보
     @GetMapping("/{itemId}")
     public ResponseEntity<?> itemDetail(@PathVariable Long itemId) {
         try {
@@ -62,5 +63,34 @@ public class ItemController {
     }
 
 
+    // 상품 수정
+    @PutMapping("/{itemId}")
+    public ResponseEntity<?> updateItem(@PathVariable Long itemId,
+                                        @RequestBody ItemDTO itemDTO,
+                                        List<MultipartFile> itemImages) throws Exception {
+
+        try {
+            ResponseEntity<?> responseEntity =
+                    itemService.updateItem(itemId, itemDTO, itemImages);
+            return ResponseEntity.ok().body(responseEntity);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    // 상품 삭제
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<?> deleteItem(
+            @PathVariable Long itemId,
+            @RequestBody ItemImgDTO itemImg
+    ) {
+        if(itemImg == null) {
+            log.info("삭제할 수 없습니다.");
+            return ResponseEntity.badRequest().build();
+        } else {
+            String result = itemService.removeItem(itemId, itemImg);
+            return ResponseEntity.ok().body(result);
+        }
+    }
 
 }
