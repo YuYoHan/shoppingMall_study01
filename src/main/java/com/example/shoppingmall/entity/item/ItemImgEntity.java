@@ -28,20 +28,6 @@ public class ItemImgEntity extends BaseEntity {
     @JoinColumn(name = "item_id")
     private ItemEntity item;
 
-    // 원본 이미지 파일명, 업데이트할 이미지 파일명, 이미지 경로 파라미터로 입력 받아서
-    // 이미지 정보를 업데이트 하는 메소드입니다.
-    public void updateItemImg(String oriImgName,
-                              String uploadImgName,
-                              String uploadImgUrl,
-                              String uploadImgPath,
-                              String repImgYn) {
-        this.oriImgName = oriImgName;
-        this.uploadImgName = uploadImgName;
-        this.uploadImgUrl = uploadImgUrl;
-        this.uploadImgPath = uploadImgPath;
-        this.repImgYn = repImgYn;
-    }
-
     @Builder
     public ItemImgEntity(Long itemImgId,
                          String uploadImgPath,

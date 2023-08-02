@@ -1,0 +1,6 @@
+jwt:
+  secret_key: 342fdskjhfsdiumnbvxuicvwebvbvjoifjioejoiewjwef@!djsfhdsjkcvoujvkcxnvuvxojoxpvjew9vuw9esfhkjsdaudauida
+  access:
+    expiration : 360000
+  refresh:
+    expiration : 1209600000

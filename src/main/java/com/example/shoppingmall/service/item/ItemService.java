@@ -152,27 +152,18 @@ public class ItemService {
 
         if (existingItemImgs.isEmpty()) {
             for (int i = 0; i < products.size(); i++) {
-                ItemImgDTO itemImgDTO = products.get(i);
 
+                ItemImgDTO itemImgDTO = products.get(i);
                 ItemImgEntity itemImg = ItemImgEntity.builder()
                         .item(item)
                         .oriImgName(itemImgDTO.getOriImgName())
                         .uploadImgName(itemImgDTO.getUploadImgName())
                         .uploadImgUrl(itemImgDTO.getUploadImgUrl())
                         .uploadImgPath(itemImgDTO.getUploadImgPath())
+                        // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 Y로 세팅합니다.
+                        // 나머지 상품 이미지는 N으로 설정합니다.
+                        .repImgYn(i == 0 ? "Y" : "N") // 대표 이미지 여부 지정
                         .build();
-
-                // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 Y로 세팅합니다.
-                // 나머지 상품 이미지는 N으로 설정합니다.
-                if (i == 0) {
-                    itemImg = ItemImgEntity.builder()
-                            .repImgYn("Y")
-                            .build();
-                } else {
-                    itemImg = ItemImgEntity.builder()
-                            .repImgYn("N")
-                            .build();
-                }
 
                 itemImgRepository.save(itemImg);
                 existingItemImgs.add(itemImg);
@@ -224,5 +215,7 @@ public class ItemService {
         String result = s3UploaderService.deleteFile(uploadFilePath, uuidFileName);
         return result;
     }
+
+
 
 }
