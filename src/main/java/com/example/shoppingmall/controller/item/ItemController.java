@@ -73,6 +73,8 @@ public class ItemController {
     }
 
     // 전체 상품 보여주기
+    // 파라미터로 받는다.
+    // 예) localhost:8080/api/v1/items?page=1&searchKeyword=내용
     @GetMapping("")
     public ResponseEntity<?> getItems(
             // SecuritConfig에 Page 설정을 한 페이지에 10개 보여주도록
