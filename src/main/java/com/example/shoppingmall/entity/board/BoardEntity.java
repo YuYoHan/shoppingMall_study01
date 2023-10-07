@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "board")
 @Table
@@ -23,9 +25,24 @@ public class BoardEntity extends BaseEntity {
     private String title;
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private MemberEntity member;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OrderBy("boardImgId asc")
+    private List<BoardImgEntity> boardImgDTOList = new ArrayList<>();
 
+    @Builder
+    public BoardEntity(Long boardId,
+                       String title,
+                       String content,
+                       MemberEntity member,
+                       List<BoardImgEntity> boardImgDTOList) {
+        this.boardId = boardId;
+        this.title = title;
+        this.content = content;
+        this.member = member;
+        this.boardImgDTOList = boardImgDTOList;
+    }
 }

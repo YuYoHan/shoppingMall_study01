@@ -1,7 +1,7 @@
 package com.example.shoppingmall.dto.board;
 
-import com.example.shoppingmall.dto.item.ItemImgDTO;
-import com.example.shoppingmall.dto.member.MemberDTO;
+import com.example.shoppingmall.entity.board.BoardEntity;
+import com.example.shoppingmall.entity.board.BoardImgEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,8 +28,8 @@ public class BoardDTO {
     @Schema(description = "게시판을 작성한 유저번호", example = "1", required = true)
     private Long userId;
 
-    @Schema(description = "유저 이메일")
-    private String userEmail;
+    @Schema(description = "유저 닉네임")
+    private String nickName;
 
     @Schema(description = "게시글 작성 시간")
     private LocalDateTime regTime;
@@ -39,11 +39,13 @@ public class BoardDTO {
     @Schema(description = "게시글 이미지 정보")
     private List<BoardImgDTO> boardImgDTOList = new ArrayList<>();
 
+
+    @Builder
     public BoardDTO(Long boardId,
                     String title,
                     String content,
                     Long userId,
-                    String userEmail,
+                    String nickName,
                     LocalDateTime regTime,
                     LocalDateTime updateTime,
                     List<BoardImgDTO> boardImgDTOList) {
@@ -51,9 +53,39 @@ public class BoardDTO {
         this.title = title;
         this.content = content;
         this.userId = userId;
-        this.userEmail = userEmail;
+        this.nickName = nickName;
         this.regTime = regTime;
         this.updateTime = updateTime;
         this.boardImgDTOList = boardImgDTOList;
+    }
+
+    public static BoardDTO toBoardDTO(BoardEntity board) {
+        List<BoardImgEntity> boardImgEntities = board.getBoardImgDTOList();
+        List<BoardImgDTO> boardImgDTOS = new ArrayList<>();
+
+        for(BoardImgEntity boardImgEntity : boardImgEntities) {
+            BoardImgDTO boardImgDTO = BoardImgDTO.builder()
+                    .boardImgId(boardImgEntity.getBoardImgId())
+                    .oriImgName(boardImgEntity.getOriImgName())
+                    .uploadImgName(boardImgEntity.getUploadImgName())
+                    .uploadImgUrl(boardImgEntity.getUploadImgUrl())
+                    .uploadImgPath(boardImgEntity.getUploadImgPath())
+                    .repImgYn(boardImgEntity.getRepImgYn())
+                    .build();
+
+            // DTO로 바꿔준 것을 다시 List형식으로 바꿈
+            // 다시 List로 해주는 이유는  private List<BoardImgDTO> boardImgDTOList = new ArrayList<>();
+            // 여기에 넣어주기 위한 것이다.
+            boardImgDTOS.add(boardImgDTO);
+        }
+        return BoardDTO.builder()
+                .boardId(board.getBoardId())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .nickName(board.getMember().getNickName())
+                .boardImgDTOList(boardImgDTOS)
+                .regTime(board.getRegTime())
+                .updateTime(board.getUpdateTime())
+                .build();
     }
 }
