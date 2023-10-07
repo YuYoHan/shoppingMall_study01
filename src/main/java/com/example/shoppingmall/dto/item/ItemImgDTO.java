@@ -50,23 +50,13 @@ public class ItemImgDTO {
     }
 
     public static ItemImgDTO toItemDTO(ItemImgEntity itemImgEntity) {
-        ItemImgDTO itemImgDTO = ItemImgDTO.builder()
+        return ItemImgDTO.builder()
                 .itemImgId(itemImgEntity.getItemImgId())
                 .oriImgName(itemImgEntity.getOriImgName())
                 .uploadImgName(itemImgEntity.getUploadImgName())
                 .uploadImgUrl(itemImgEntity.getUploadImgUrl())
                 .uploadImgPath(itemImgEntity.getUploadImgPath())
                 .repImgYn(itemImgEntity.getRepImgYn())
-                .item(ItemDTO.builder()
-                        .itemId(itemImgEntity.getItem().getItemId())
-                        .itemNum(itemImgEntity.getItem().getItemNum())
-                        .itemDetail(itemImgEntity.getItem().getItemDetail())
-                        .itemSellStatus(itemImgEntity.getItem().getItemSellStatus())
-                        .price((itemImgEntity.getItem().getPrice()))
-                        .stockNumber(itemImgEntity.getItem().getStockNumber())
-                        .build())
                 .build();
-
-        return itemImgDTO;
     }
 }

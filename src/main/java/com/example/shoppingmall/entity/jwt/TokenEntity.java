@@ -1,15 +1,12 @@
 package com.example.shoppingmall.entity.jwt;
 
-import com.example.shoppingmall.dto.member.Role;
+import com.example.shoppingmall.dto.jwt.TokenDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity(name = "token")
@@ -19,17 +16,20 @@ import java.util.Date;
 public class TokenEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "token_id")
     private Long id;
+    @Column(name = "grant_type")
     private String grantType;
+    @Column(name = "access_token")
     private String accessToken;
+    @Column(name = "refresh_token")
     private String refreshToken;
+    @Column(name = "member_email")
     private String userEmail;
-    private String nickName;
-    private Long userId;
+    @Column(name = "access_token_time")
     private Date accessTokenTime;
+    @Column(name = "refresh_token_time")
     private Date refreshTokenTime;
-    private Role role;
-
 
     @Builder
     public TokenEntity(Long id,
@@ -37,20 +37,27 @@ public class TokenEntity {
                        String accessToken,
                        String refreshToken,
                        String userEmail,
-                       String nickName,
-                       Long userId,
                        Date accessTokenTime,
-                       Date refreshTokenTime,
-                       Role role) {
+                       Date refreshTokenTime
+                       ) {
         this.id = id;
         this.grantType = grantType;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.userEmail = userEmail;
-        this.nickName = nickName;
-        this.userId = userId;
         this.accessTokenTime = accessTokenTime;
         this.refreshTokenTime = refreshTokenTime;
-        this.role = role;
+    }
+
+    public static TokenEntity toTokenEntity(TokenDTO tokenDTO) {
+        return TokenEntity.builder()
+                .id(tokenDTO.getId())
+                .grantType(tokenDTO.getGrantType())
+                .accessToken(tokenDTO.getAccessToken())
+                .refreshToken(tokenDTO.getRefreshToken())
+                .userEmail(tokenDTO.getUserEmail())
+                .accessTokenTime(tokenDTO.getAccessTokenTime())
+                .refreshTokenTime(tokenDTO.getRefreshTokenTime())
+                .build();
     }
 }

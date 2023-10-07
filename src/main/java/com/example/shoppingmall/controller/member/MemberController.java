@@ -2,23 +2,18 @@ package com.example.shoppingmall.controller.member;
 
 import com.example.shoppingmall.dto.jwt.TokenDTO;
 import com.example.shoppingmall.dto.member.MemberDTO;
-import com.example.shoppingmall.entity.member.MemberEntity;
 import com.example.shoppingmall.service.jwt.RefreshTokenService;
 import com.example.shoppingmall.service.member.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +31,7 @@ public class MemberController {
     private final RefreshTokenService refreshTokenService;
 
     // 회원 가입
-    @PostMapping("/api/v1/users/")
+    @PostMapping("/api/v1/users")
     @Tag(name = "member")
     @Operation(summary = "회원가입", description = "회원가입하는 API입니다")
     // BindingResult 타입의 매개변수를 지정하면 BindingResult 매개 변수가 입력값 검증 예외를 처리한다.
@@ -128,12 +123,17 @@ public class MemberController {
     }
 
     // 회원정보 수정
-    @PutMapping("/api/v1/users/")
+    @PutMapping("/api/v1/users")
     @Tag(name = "member")
     @Operation(summary = "수정 API", description = "유저 정보를 수정하는 API입니다.")
-    public ResponseEntity<?> update(@RequestBody MemberDTO memberDTO) throws Exception{
+    public ResponseEntity<?> update(@RequestBody MemberDTO memberDTO,
+                                    @AuthenticationPrincipal UserDetails userDetails) throws Exception{
         try {
-            MemberDTO update = memberService.update(memberDTO);
+            // 검증과 유효성이 끝난 토큰을 SecurityContext 에 저장하면
+            // @AuthenticationPrincipal UserDetails userDetails 으로 받아오고 사용
+            // zxzz45@naver.com 이런식으로 된다.
+            String userEmail = userDetails.getUsername();
+            MemberDTO update = memberService.update(memberDTO, userEmail);
             return ResponseEntity.ok().body(update);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("잘못된 요청");

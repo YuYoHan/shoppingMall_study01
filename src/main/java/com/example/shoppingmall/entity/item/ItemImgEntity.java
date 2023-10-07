@@ -14,17 +14,21 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 public class ItemImgEntity extends BaseEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_img_id")
     private Long itemImgId;
+    @Column(name = "upload_img_path")
     private String uploadImgPath;
+    @Column(name = "upload_img_name")
     private String uploadImgName;               // 이미지 파일명
+    @Column(name = "ori_img_name")
     private String oriImgName;                  // 원본 이미지 파일명
+    @Column(name = "upload_img_url")
     private String uploadImgUrl;                // 이미지 조회 경로
+    @Column(name = "rep_img_yn")
     private String repImgYn;                    // 대표 이미지 여부 Y면 대표이미지를 보여줌
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")
     private ItemEntity item;
 
@@ -44,7 +48,4 @@ public class ItemImgEntity extends BaseEntity {
         this.item = item;
         this.repImgYn = repImgYn;
     }
-
-
-
 }

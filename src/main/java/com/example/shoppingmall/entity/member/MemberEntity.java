@@ -15,46 +15,57 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 public class MemberEntity extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id", nullable = false)
     private Long userId;
 
-    @Column(name = "user_name", nullable = false)
-    private  String userName;
+    @Column(name = "member_name", nullable = false)
+    private String userName;
 
-    @Column(name = "user_email", nullable = false)
+    @Column(name = "member_email", nullable = false)
     private String userEmail;
 
-    @Column(name = "user_pw")
+    @Column(name = "member_pw")
     private String userPw;
 
-    @Column(name = "nick_name")
+    @Column(name = "member_nickName", unique = true)
     private String nickName;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "member_role", nullable = false)
     // ROLE_USER, ROLE_ADMIN
     private Role role;
 
     // OAuth2 가입할 때를 위해서
+    @Column(name = "provider")
+    private String provider;
+    @Column(name = "provider_id")
+    private String providerId;
 
     @Embedded
+    @Column(name = "member_addr")
     private AddressEntity address;
 
     @Builder
     public MemberEntity(
             Long userId,
             String userName,
-                        String userEmail,
-                        String userPw,
-                        String nickName,
-                        Role role,
-                        AddressEntity address) {
+            String userEmail,
+            String userPw,
+            String nickName,
+            Role role,
+            String provider,
+            String providerId,
+            AddressEntity address) {
         this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPw = userPw;
         this.nickName = nickName;
         this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
         this.address = address;
     }
 

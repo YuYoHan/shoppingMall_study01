@@ -19,37 +19,32 @@ repositories {
 }
 
 dependencies {
+    // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    testImplementation 'org.springframework.security:spring-security-test'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // Querydsl 추가 시작
-    implementation 'com.querydsl:querydsl-jpa'
-    implementation "com.querydsl:querydsl-core"
-    implementation "com.querydsl:querydsl-collections"
-    // querydsl JPAAnnotationProcessor 사용 지정
-    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
-    // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
-    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-    // java.lang.NoClassDefFoundError (javax.annotation.Entity) 대응 코드
-    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    // oauth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.2'
+    // security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // 서버를 재실행 안해줘도 바로 처리가능하게 만드는 라이브러리
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // MySQL
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    // 룸북
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    // 유효성 검사 라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     // swagger
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    // thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     // AWS S3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }

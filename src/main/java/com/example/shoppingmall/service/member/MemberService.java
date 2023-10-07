@@ -12,26 +12,20 @@ import com.example.shoppingmall.repository.jwt.TokenRepository;
 import com.example.shoppingmall.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.usertype.UserType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 // 비즈니스 로직을 담당하는 서비스 계층 클래스에
@@ -48,7 +42,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtProvider jwtProvider;
     private final TokenRepository tokenRepository;
 
@@ -92,8 +85,9 @@ public class MemberService {
 
     // 아이디 조회
     public MemberDTO search(Long userId) {
-        Optional<MemberEntity> searchId = memberRepository.findById(userId);
-        MemberDTO memberDTO = MemberDTO.toMemberDTO(searchId);
+        MemberEntity member = memberRepository.findById(userId)
+                .orElseThrow(EntityNotFoundException::new);
+        MemberDTO memberDTO = MemberDTO.toMemberDTO(member);
         return memberDTO;
     }
 
@@ -110,10 +104,8 @@ public class MemberService {
 
     // 로그인
     public ResponseEntity<TokenDTO> login(String userEmail, String userPw) throws Exception {
-
         MemberEntity findUser = memberRepository.findByUserEmail(userEmail);
         log.info("findUser : " + findUser);
-
 
         if (findUser != null) {
             // 사용자가 입력한 패스워드를 암호화하여 사용자 정보와 비교
@@ -121,10 +113,14 @@ public class MemberService {
                 // UsernamePasswordAuthenticationToken은 Spring Security에서
                 // 사용자의 이메일과 비밀번호를 이용하여 인증을 진행하기 위해 제공되는 클래스
                 // 이후에는 생성된 authentication 객체를 AuthenticationManager를 이용하여 인증을 진행합니다.
-                // AuthenticationManager는 인증을 담당하는 Spring Security의 중요한 인터페이스로, 실제로 사용자의 인증 과정을 처리합니다.
+                // AuthenticationManager는 인증을 담당하는 Spring Security 의 중요한 인터페이스로, 실제로 사용자의 인증 과정을 처리합니다.
                 // AuthenticationManager를 사용하여 사용자가 입력한 이메일과 비밀번호가 올바른지 검증하고,
                 // 인증에 성공하면 해당 사용자에 대한 Authentication 객체를 반환합니다. 인증에 실패하면 예외를 발생시킵니다.
                 // 인증은 토큰을 서버로 전달하고, 서버에서 해당 토큰을 검증하여 사용자를 인증하는 단계에서 이루어집니다.
+                // 즉, Authentication 객체를 생성하고, 해당 객체를 SecurityContext에 저장하게 되면,
+                // 인증이 완료되지 않은 상태에서 사용자 정보를 가지는 인증 객체가 저장됩니다.
+                // 이후 검증 시에는 해당 인증 객체를 기반으로 다시 UsernamePasswordAuthenticationToken을 생성하여
+                // 인증 상태를 true로 설정하는 것이 가능합니다.
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userEmail, userPw);
 
                 //  UsernamePasswordAuthenticationToken
@@ -155,55 +151,18 @@ public class MemberService {
                             .accessToken(token.getAccessToken())
                             .refreshToken(token.getRefreshToken())
                             .userEmail(token.getUserEmail())
-                            .nickName(findUser.getNickName())
-                            .userId(findUser.getUserId())
                             .accessTokenTime(token.getAccessTokenTime())
                             .refreshTokenTime(token.getRefreshTokenTime())
-                            .role(findUser.getRole())
                             .build();
                     // 기존 토큰을 업데이트할 때 사용할 임시 객체로 TokenEntity tokenEntity2를 생성합니다.
-                    TokenEntity updateToken = TokenEntity.builder()
-                            .grantType(token.getGrantType())
-                            .accessToken(token.getAccessToken())
-                            .refreshToken(token.getRefreshToken())
-                            .userEmail(token.getUserEmail())
-                            .nickName(token.getNickName())
-                            .userId(token.getUserId())
-                            .accessTokenTime(token.getAccessTokenTime())
-                            .refreshTokenTime(token.getRefreshTokenTime())
-                            .role(token.getRole())
-                            .build();
-
+                    TokenEntity updateToken = TokenEntity.toTokenEntity(token);
                     log.info("token in MemberService : " + updateToken);
                     tokenRepository.save(updateToken);
                 } else {
                     log.info("발급한 토큰이 없습니다.");
-                    token = TokenDTO.builder()
-                            .grantType(token.getGrantType())
-                            .accessToken(token.getAccessToken())
-                            .refreshToken(token.getRefreshToken())
-                            .userEmail(token.getUserEmail())
-                            .nickName(findUser.getNickName())
-                            .userId(findUser.getUserId())
-                            .accessTokenTime(token.getAccessTokenTime())
-                            .refreshTokenTime(token.getRefreshTokenTime())
-                            .role(findUser.getRole())
-                            .build();
 
                     // 새로운 토큰을 DB에 저장할 때 사용할 임시 객체로 TokenEntity tokenEntity를 생성합니다.
-                    TokenEntity newToken = TokenEntity.builder()
-                            .grantType(token.getGrantType())
-                            .accessToken(token.getAccessToken())
-                            .refreshToken(token.getRefreshToken())
-                            .userEmail(token.getUserEmail())
-                            .nickName(token.getNickName())
-                            .userId(token.getUserId())
-                            .accessTokenTime(token.getAccessTokenTime())
-                            .refreshTokenTime(token.getRefreshTokenTime())
-                            .role(token.getRole())
-                            .build();
-
-
+                    TokenEntity newToken = TokenEntity.toTokenEntity(token);
                     log.info("token in MemberService : " + newToken);
                     tokenRepository.save(newToken);
                 }
@@ -214,9 +173,9 @@ public class MemberService {
                 return new ResponseEntity<>(token, headers, HttpStatus.OK);
             }
         } else {
-            return null;
+            return ResponseEntity.notFound().build();
         }
-        return null;
+        return ResponseEntity.notFound().build();
     }
 
     private List<GrantedAuthority> getAuthoritiesForUser(MemberEntity member) {
@@ -233,9 +192,10 @@ public class MemberService {
 
 
     // 회원정보 수정
-    public MemberDTO update(MemberDTO memberDTO) {
+    public MemberDTO update(MemberDTO memberDTO, String userEmail) {
 
-        MemberEntity findUser = memberRepository.findByUserEmail(memberDTO.getUserEmail());
+        MemberEntity findUser = memberRepository.findByUserEmail(userEmail);
+        log.info("findUser : " + findUser);
 
         // 새로 가입
         if(findUser == null) {
@@ -252,7 +212,7 @@ public class MemberService {
                             .build()).build();
 
             memberRepository.save(findUser);
-            MemberDTO modifyUser = MemberDTO.toMemberDTO(Optional.of(findUser));
+            MemberDTO modifyUser = MemberDTO.toMemberDTO(findUser);
             return modifyUser;
         } else {
             // 회원 수정
@@ -278,11 +238,12 @@ public class MemberService {
             memberRepository.save(findUser);
             // 제대로 DTO 값이 엔티티에 넣어졌는지 확인하기 위해서
             // 엔티티에 넣어주고 다시 DTO 객체로 바꿔서 리턴을 해줬습니다.
-            MemberDTO memberDto = MemberDTO.toMemberDTO(Optional.of(findUser));
+            MemberDTO memberDto = MemberDTO.toMemberDTO(findUser);
             log.info("memberDto : " + memberDto);
             return memberDto;
         }
     }
+
 
     // 이메일 중복 체크
     public String emailCheck(String userEmail) {

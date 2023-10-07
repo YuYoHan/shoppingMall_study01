@@ -1,5 +1,7 @@
 package com.example.shoppingmall.dto.item;
 
+import com.example.shoppingmall.dto.comment.CommentDTO;
+import com.example.shoppingmall.entity.comment.CommentEntity;
 import com.example.shoppingmall.entity.item.ItemEntity;
 import com.example.shoppingmall.entity.item.ItemImgEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +25,7 @@ public class ItemDTO {
 
     @Schema(description = "상품 이름")
     @NotBlank(message = "상품명은 필수 입력입니다.")
-    private String itemNum;     // 상품 명
+    private String itemName;     // 상품 명
 
     @Schema(description = "상품 가격")
     @NotNull(message = "가격은 필수 입력입니다.")
@@ -46,22 +48,31 @@ public class ItemDTO {
     @Schema(description = "상품 업데이트 시간")
     private LocalDateTime updateTime;
 
+    @Schema(description = "회원 닉네임")
+    private String memberNickName;
+
+    @Schema(description = "상품 이미지")
     // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트
     private List<ItemImgDTO> itemImgList = new ArrayList<>();
 
+    @Schema(description = "댓글")
+    private List<CommentDTO> commentDTOList = new ArrayList<>();
+
     @Builder
     public ItemDTO(Long itemId,
-                   String itemNum,
+                   String itemName,
                    int price,
                    int stockNumber,
                    String itemDetail,
                    ItemSellStatus itemSellStatus,
                    LocalDateTime regTime,
                    LocalDateTime updateTime,
-                   List<ItemImgDTO> itemImgList
+                   List<ItemImgDTO> itemImgList,
+                   String memberNickName,
+                   List<CommentDTO> commentDTOList
                    ) {
         this.itemId = itemId;
-        this.itemNum = itemNum;
+        this.itemName = itemName;
         this.price = price;
         this.stockNumber = stockNumber;
         this.itemDetail = itemDetail;
@@ -69,14 +80,18 @@ public class ItemDTO {
         this.regTime = regTime;
         this.updateTime = updateTime;
         this.itemImgList = itemImgList;
+        this.memberNickName = memberNickName;
+        this.commentDTOList = commentDTOList;
     }
 
     public static ItemDTO toItemDTO(ItemEntity item) {
+        // 상품에 담긴 이미지 리스트를 dto로 전환
         List<ItemImgEntity> itemImgEntities = item.getItemImgList();
         List<ItemImgDTO> itemDTOList = new ArrayList<>();
 
         for(ItemImgEntity itemImgEntity : itemImgEntities) {
             ItemImgDTO itemImgDTO = ItemImgDTO.builder()
+                    .itemImgId(itemImgEntity.getItemImgId())
                     .oriImgName(itemImgEntity.getOriImgName())
                     .uploadImgName(itemImgEntity.getUploadImgName())
                     .uploadImgUrl(itemImgEntity.getUploadImgUrl())
@@ -86,17 +101,26 @@ public class ItemDTO {
 
             itemDTOList.add(itemImgDTO);
         }
+        // 상품에 담긴 댓글 리스트를 dto로 전환
+        List<CommentEntity> commentEntityList = item.getCommentEntityList();
+        List<CommentDTO> commentDTOList = new ArrayList<>();
+        for(CommentEntity commentEntity : commentEntityList) {
+            CommentDTO commentDTO = CommentDTO.toCommentDTO(commentEntity);
+            commentDTOList.add(commentDTO);
+        }
 
         return ItemDTO.builder()
                 .itemId(item.getItemId())
-                .itemNum(item.getItemNum())
+                .itemName(item.getItemName())
                 .price(item.getPrice())
                 .stockNumber(item.getStockNumber())
                 .itemDetail(item.getItemDetail())
                 .itemSellStatus(item.getItemSellStatus())
                 .regTime(item.getRegTime())
                 .updateTime(item.getUpdateTime())
+                .memberNickName(item.getMember().getNickName())
                 .itemImgList(itemDTOList) // 이미지 정보를 추가합니다.
+                .commentDTOList(commentDTOList)
                 .build();
     }
 }

@@ -10,13 +10,13 @@ import com.example.shoppingmall.repository.jwt.TokenRepository;
 import com.example.shoppingmall.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.usertype.UserType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class RefreshTokenService {
     private final TokenRepository tokenRepository;
     private final JwtProvider jwtProvider;
@@ -44,26 +45,7 @@ public class RefreshTokenService {
             TokenDTO accessToken = jwtProvider.createAccessToken(userEmail, authorities);
             log.info("accessToken : " + accessToken);
 
-
-            accessToken = TokenDTO.builder()
-                    .grantType(accessToken.getGrantType())
-                    .accessToken(accessToken.getAccessToken())
-                    .userEmail(accessToken.getUserEmail())
-                    .nickName(byRefreshToken.getNickName())
-                    .userId(byRefreshToken.getUserId())
-                    .accessTokenTime(accessToken.getAccessTokenTime())
-                    .build();
-
-            TokenEntity tokenEntity = TokenEntity.builder()
-                    .grantType(accessToken.getGrantType())
-                    .accessToken(accessToken.getAccessToken())
-                    .refreshToken(accessToken.getRefreshToken())
-                    .userEmail(accessToken.getUserEmail())
-                    .nickName(accessToken.getNickName())
-                    .userId(accessToken.getUserId())
-                    .accessTokenTime(accessToken.getAccessTokenTime())
-                    .build();
-
+            TokenEntity tokenEntity = TokenEntity.toTokenEntity(accessToken);
 
             log.info("token : " + tokenEntity);
             tokenRepository.save(tokenEntity);

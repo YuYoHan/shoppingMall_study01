@@ -1,7 +1,6 @@
 package com.example.shoppingmall.dto.jwt;
 
 
-import com.example.shoppingmall.dto.member.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,16 +25,10 @@ public class TokenDTO {
     private String refreshToken;
     @Schema(description = "회원 이메일")
     private String userEmail;
-    @Schema(description = "닉네임")
-    private String nickName;
-    @Schema(description = "유저 번호")
-    private Long userId;
     @Schema(description = "access token 발급 시간")
     private Date accessTokenTime;
     @Schema(description = "refresh token 발급 시간")
     private Date refreshTokenTime;
-    @Schema(description = "유저 권한")
-    private Role role;
 
     @Builder
     public TokenDTO(Long id,
@@ -43,21 +36,15 @@ public class TokenDTO {
                     String accessToken,
                     String refreshToken,
                     String userEmail,
-                    String nickName,
-                    Long userId,
                     Date accessTokenTime,
-                    Date refreshTokenTime,
-                    Role role) {
+                    Date refreshTokenTime) {
         this.id = id;
         this.grantType = grantType;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.userEmail = userEmail;
-        this.nickName = nickName;
-        this.userId = userId;
         this.accessTokenTime = accessTokenTime;
         this.refreshTokenTime = refreshTokenTime;
-        this.role = role;
     }
 
 }

@@ -8,10 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Optional;
 
 @ToString
 @Getter
@@ -32,15 +32,21 @@ public class MemberDTO {
 
     @Schema(description = "닉네임")
     @NotNull(message = "닉네임은 필수입력입니다.")
+    @Column(unique = true)
     private String nickName;
 
     @Schema(description = "회원 비밀번호")
-    @NotNull(message = "비밀번호는 필 수 입니다.")
     private String userPw;
 
     @Schema(description = "회원 권한")
     @NotNull(message = "유저 타입은 필 수 입니다.")
     private Role role;
+
+    @Schema(description = "소셜 로그인")
+    private String provider;        // 예) google
+
+    @Schema(description = "소셜 로그인 식별 아이디")
+    private String providerId;
 
     @Schema(description = "회원 주소")
     private AddressDTO addressDTO;
@@ -51,6 +57,8 @@ public class MemberDTO {
                      String nickName,
                      String userName,
                      String userPw,
+                     String provider,
+                     String providerId,
                      Role role,
                      AddressDTO addressDTO) {
         this.userId = userId;
@@ -58,25 +66,27 @@ public class MemberDTO {
         this.userName = userName;
         this.userPw = userPw;
         this.nickName = nickName;
+        this.provider = provider;
+        this.providerId = providerId;
         this.role = role;
         this.addressDTO = addressDTO;
     }
 
-    public static MemberDTO toMemberDTO(Optional<MemberEntity> member) {
-        MemberDTO memberDTO = MemberDTO.builder()
-                .userId(member.get().getUserId())
-                .userEmail(member.get().getUserEmail())
-                .userName(member.get().getUserName())
-                .userPw(member.get().getUserPw())
-                .nickName(member.get().getNickName())
-                .role(member.get().getRole())
+    public static MemberDTO toMemberDTO(MemberEntity member) {
+        return MemberDTO.builder()
+                .userId(member.getUserId())
+                .userEmail(member.getUserEmail())
+                .userName(member.getUserName())
+                .userPw(member.getUserPw())
+                .nickName(member.getNickName())
+                .role(member.getRole())
+                .provider(member.getProvider())
+                .providerId(member.getProviderId())
                 .addressDTO(AddressDTO.builder()
-                        .userAddr(member.get().getAddress().getUserAddr())
-                        .userAddrDetail(member.get().getAddress().getUserAddrDetail())
-                        .userAddrEtc(member.get().getAddress().getUserAddrEtc())
+                        .userAddr(member.getAddress().getUserAddr())
+                        .userAddrDetail(member.getAddress().getUserAddrDetail())
+                        .userAddrEtc(member.getAddress().getUserAddrEtc())
                         .build())
                 .build();
-
-        return memberDTO;
     }
 }

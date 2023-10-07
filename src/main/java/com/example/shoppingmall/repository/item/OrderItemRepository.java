@@ -1,6 +1,6 @@
 package com.example.shoppingmall.repository.item;
 
-import com.example.shoppingmall.entity.item.OrderItemEntity;
+import com.example.shoppingmall.entity.order.OrderItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

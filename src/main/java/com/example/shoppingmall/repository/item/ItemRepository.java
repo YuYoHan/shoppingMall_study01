@@ -1,13 +1,17 @@
 package com.example.shoppingmall.repository.item;
 
 import com.example.shoppingmall.entity.item.ItemEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
     ItemEntity deleteByItemId(Long itemId);
+
+    // 페이징 처리를 위해서
+    Page<ItemEntity> findAll(Pageable pageable);
+    // 검색
+    Page<ItemEntity> findByItemNameContaining(Pageable pageable, String searchKeyword);
 }
