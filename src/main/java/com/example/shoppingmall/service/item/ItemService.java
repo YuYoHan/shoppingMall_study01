@@ -195,7 +195,6 @@ public class ItemService {
                 }
             }
 
-
             // 위에서 작성하지 못한 ItemImgEntity 를 item 엔티티에 넣어준다.
             item = ItemEntity.builder()
                     .itemId(item.getItemId())
@@ -237,9 +236,13 @@ public class ItemService {
                 // 상품 정보 삭제
                 itemRepository.deleteByItemId(itemEntity.getItemId());
                 // DB에서 이미지 삭제
-                itemImgRepository.deleteById(img.getItemImgId());
+                // 이걸 주석처리하는 이유 Item 엔티티에서 orphanRemoval = true를 하면
+                // 그것과 양방향을 맺고 있는 것도 자동으로 삭제해주므로 필요가 없다.
+                // 같은 이유로 댓글 삭제도 없에야 한다.
+                // 즉, 상품을 삭제하면 해당 상품과 관련된 모든 댓글과 이미지가 자동으로 데이터베이스에 제거됩니다.
+//                itemImgRepository.deleteById(img.getItemImgId());
                 // 댓글 삭제
-                commentRepository.deleteByItemItemId(itemEntity.getItemId());
+//                commentRepository.deleteByItemItemId(itemEntity.getItemId());
 
                 // S3에서 이미지 삭제
                 String result = s3ItemImgUploaderService.deleteFile(uploadFilePath, uuidFileName);

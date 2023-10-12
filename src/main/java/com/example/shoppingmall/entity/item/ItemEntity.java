@@ -42,14 +42,14 @@ public class ItemEntity extends BaseTimeEntity {
 
     // 상품 이미지
     @Column(name = "item_img")
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("itemImgId asc")
     // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트
     private List<ItemImgEntity> itemImgList = new ArrayList<>();
 
     // 상품 댓글
     @Column(name = "comment")
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("commentId asc")
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 

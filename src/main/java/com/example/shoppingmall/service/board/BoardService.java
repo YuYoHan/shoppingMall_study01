@@ -211,7 +211,6 @@ public class BoardService {
                 String uploadFileName = img.getUploadImgName();
 
                 boardRepository.deleteByBoardId(findBoard.getBoardId());
-                boardImgRepository.deleteById(img.getBoardImgId());
                 String result = s3BoardImgUploaderService.deleteFile(uploadFilePath, uploadFileName);
                 log.info(result);
             }

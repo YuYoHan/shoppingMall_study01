@@ -29,7 +29,7 @@ public class BoardEntity extends BaseEntity {
     @JoinColumn(name = "user_id")
     private MemberEntity member;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("boardImgId asc")
     private List<BoardImgEntity> boardImgDTOList = new ArrayList<>();
 
