@@ -29,8 +29,6 @@ public class BoardImgDTO {
     @Schema(description = "대표 이미지 여부")
     private String repImgYn;
 
-    @Schema(description = "상품 정보")
-    private BoardDTO board;
 
     @Builder
     public BoardImgDTO(Long boardImgId,
@@ -38,15 +36,13 @@ public class BoardImgDTO {
                       String oriImgName,
                       String uploadImgUrl,
                       String uploadImgPath,
-                      String repImgYn,
-                      BoardDTO board) {
+                      String repImgYn) {
         this.boardImgId = boardImgId;
         this.uploadImgName = uploadImgName;
         this.oriImgName = oriImgName;
         this.uploadImgUrl = uploadImgUrl;
         this.uploadImgPath = uploadImgPath;
         this.repImgYn = repImgYn;
-        this.board = board;
     }
 
     public static BoardImgDTO toBoardImgDTO(BoardImgEntity boardImgEntity) {

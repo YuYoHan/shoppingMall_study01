@@ -109,7 +109,6 @@ public class BoardService {
                     .content(boardEntity.getContent())
                     .nickName(boardEntity.getMember().getNickName())
                     .regTime(boardEntity.getRegTime())
-                    .updateTime(boardEntity.getUpdateTime())
                     .boardImgDTOList(boardImgDTOList)
                     .build();
 

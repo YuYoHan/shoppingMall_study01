@@ -2,6 +2,8 @@ package com.example.shoppingmall.controller.item;
 
 import com.example.shoppingmall.dto.item.ItemDTO;
 import com.example.shoppingmall.service.item.ItemService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
@@ -26,12 +29,16 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/items")
+@Tag(name = "item", description = "상품 API")
 public class ItemController {
 
     private final ItemService itemService;
 
     // 상품 등록
     @PostMapping("")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @Tag(name = "item")
+    @Operation(summary = "상품 등록", description = "상품을 등록하는 API입니다.")
     // @RequestPart(value = "files")는 주로 Spring 기반의 웹 애플리케이션에서 사용되는 Java 어노테이션입니다.
     // HTTP 요청을 처리하는 컨트롤러 메서드에서 다중 파트 파일 업로드를 처리하는 데 사용됩니다.
     // 이 어노테이션은 HTTP 요청에서 "files"라는 이름의 다중 파트를 추출하고 해당 파일을 처리하기 위해 사용됩니다.
@@ -62,6 +69,8 @@ public class ItemController {
 
     // 상품 상세 정보
     @GetMapping("/{itemId}")
+    @Tag(name = "item")
+    @Operation(summary = "상품 상세 정보 보기", description = "상품의 상세정보를 볼 수 있습니다.")
     public ResponseEntity<?> itemDetail(@PathVariable Long itemId) {
         try {
             ResponseEntity<ItemDTO> item = itemService.getItem(itemId);
@@ -76,6 +85,8 @@ public class ItemController {
     // 파라미터로 받는다.
     // 예) localhost:8080/api/v1/items?page=1&searchKeyword=내용
     @GetMapping("")
+    @Tag(name = "item")
+    @Operation(summary = "상품 전체", description = "모든 상품을 보여주는 API입니다.")
     public ResponseEntity<?> getItems(
             // SecuritConfig에 Page 설정을 한 페이지에 10개 보여주도록
             // 설정을 해서 여기서는 할 필요가 없다.
@@ -131,6 +142,9 @@ public class ItemController {
 
     // 상품 수정
     @PutMapping("/{itemId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @Tag(name = "item")
+    @Operation(summary = "상품 수정", description = "상품을 수정하는 API입니다.")
     // multipart/form-data의 Content-Type을 요청을 처리하기 위해 @RequestPart 어노테이션을 사용
     public ResponseEntity<?> updateItem(@PathVariable Long itemId,
                                         @RequestBody ItemDTO itemDTO,
@@ -148,6 +162,9 @@ public class ItemController {
 
     // 상품 삭제
     @DeleteMapping("/{itemId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @Tag(name = "item")
+    @Operation(summary = "상품 삭제", description = "상품을 삭제하는 API입니다.")
     public ResponseEntity<?> deleteItem(
             @PathVariable Long itemId,
             @AuthenticationPrincipal UserDetails userDetails

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -126,6 +127,7 @@ public class MemberController {
     @PutMapping("/api/v1/users")
     @Tag(name = "member")
     @Operation(summary = "수정 API", description = "유저 정보를 수정하는 API입니다.")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> update(@RequestBody MemberDTO memberDTO,
                                     @AuthenticationPrincipal UserDetails userDetails) throws Exception{
         try {
@@ -144,6 +146,7 @@ public class MemberController {
     @DeleteMapping("/api/v1/users/{userId}")
     @Tag(name = "member")
     @Operation(summary = "삭제 API", description = "유저를 삭제하는 API입니다.")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public String remove(@PathVariable Long userId) {
         String delete = memberService.remove(userId);
         return delete;

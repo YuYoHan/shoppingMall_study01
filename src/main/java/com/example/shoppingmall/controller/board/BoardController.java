@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
@@ -31,6 +32,7 @@ public class BoardController {
 
     // 게시글 작성
     @PostMapping("")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> createBoard(@RequestBody BoardDTO boardDTO,
                                          @RequestPart("files") List<MultipartFile> boardImages,
                                          BindingResult result,
@@ -115,6 +117,7 @@ public class BoardController {
 
     // 게시글 수정
     @PutMapping("/{boardId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> update(@PathVariable Long boardId,
                                     @RequestBody BoardDTO boardDTO,
                                     @RequestPart(value = "files") List<MultipartFile> boardImages,
@@ -130,6 +133,7 @@ public class BoardController {
 
     // 상품삭제
     @DeleteMapping("/{boardId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long boardId,
                                     @AuthenticationPrincipal UserDetails userDetails) throws Exception {
         try {

@@ -44,21 +44,31 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http
                 .authorizeRequests()
-                .antMatchers("/api/v1/boards/**")
+                .antMatchers(HttpMethod.PUT, "/api/v1/users")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers(HttpMethod.DELETE, "/api/v1/users/{memberId}")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers("/api/v1/users/**").permitAll()
+                .antMatchers("/api/v1/boards/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/v1/boards/{boardId}")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers(HttpMethod.POST, "/api/v1/boards")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers(HttpMethod.DELETE, "/api/v1/boards/{boardId}")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers("/api/v1/comments/**")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers("/api/v1/items/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/items")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers(HttpMethod.PUT, "/api/v1/items/{itemId}")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers(HttpMethod.DELETE, "/api/v1/items/{itemId}")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers("/api/v1/admin/**")
                 .access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/api/v1/items/**")
-                .access("hasRole('ROLE_ADMIN')")
-                // /success-oauth 엔드포인트에 대해 인증된 사용자만 접근 가능하도록 설정
-//                  .antMatchers("/success-oauth").authenticated()
                 .antMatchers("/swagger-resources/**").permitAll()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers(HttpMethod.PUT,"/api/v1/users")
-                .access("hasRole('ROLE_USER')")
-                .antMatchers(HttpMethod.DELETE,"/api/v1/users/{userId}")
-                .access("hasRole('ROLE_USER')")
-                .antMatchers("/api/v1/users/**").permitAll();
+                .antMatchers("/swagger-ui/**").permitAll();
 
 
 
