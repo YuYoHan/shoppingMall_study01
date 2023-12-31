@@ -9,9 +9,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface OrderItemRepository extends JpaRepository<OrderItemEntity, Long> {
 
-    @Query("select oi from orderItem oi" +
-    " join fetch oi.item" +
-    " where (:orderId is null or oi.order.orderId = :orderId)")
+    @Query(value = "select oi from orderItem oi" +
+            " join fetch oi.item" +
+            " where (:orderId is null or oi.order.orderId = :orderId)" +
+            " order by oi.orderItemId desc ",
+            countQuery = "select count(oi) from orderItem oi" +
+                    " where (:orderId is null or oi.order.orderId = :orderId)")
     Page<OrderItemEntity> findByOrder_OrderId(Pageable pageable,
                                               @Param("orderId") Long orderId);
 }
