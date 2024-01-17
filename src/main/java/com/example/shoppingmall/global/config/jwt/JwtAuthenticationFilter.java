@@ -1,4 +1,4 @@
-package com.example.shoppingmall.global.jwt;
+package com.example.shoppingmall.global.config.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
