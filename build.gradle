@@ -1,3 +1,8 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.11'
@@ -19,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    // JPA
+    // jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     // oauth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -29,43 +34,46 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    // validation(유효성 검사)
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // 서버를 재실행 안해줘도 바로 처리가능하게 만드는 라이브러리
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    // MySQL
+    // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
     // 룸북
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    // 유효성 검사 라이브러리
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
     // swagger
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
-    // thymeleaf
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     // AWS S3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    // in-memory DB
+    runtimeOnly 'com.h2database:h2'
+    // StringUtils
+    implementation 'org.apache.commons:commons-lang3'
+    // thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    //querydsl 추가
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    // mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework:spring-context-support'
 }
-
+jar {
+    // ~~plain.jar파일은 생성되지 않게
+    enabled = false
+}
 tasks.named('test') {
     useJUnitPlatform()
 }
-// Querydsl 설정부
-def generated = 'src/main/generated'
 
-// querydsl QClass 파일 생성 위치를 지정
-tasks.withType(JavaCompile) {
-    options.getGeneratedSourceOutputDirectory().set(file(generated))
-}
-
-// java source set 에 querydsl QClass 위치 추가
-sourceSets {
-    main.java.srcDirs += [ generated ]
-}
-
-// gradle clean 시에 QClass 디렉토리 삭제
-clean {
-    delete file(generated)
-}
