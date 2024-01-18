@@ -1,5 +1,7 @@
 package com.example.shoppingmall.domain.member.api;
 
+import com.example.shoppingmall.domain.jwt.application.TokenService;
+import com.example.shoppingmall.domain.jwt.dto.TokenDTO;
 import com.example.shoppingmall.domain.member.application.MemberService;
 import com.example.shoppingmall.domain.member.dto.LoginDTO;
 import com.example.shoppingmall.domain.member.dto.ModifyMemberDTO;
@@ -27,6 +29,7 @@ import javax.persistence.EntityNotFoundException;
 @Tag(name = "member", description = "유저 API")
 public class MemberController {
     private final MemberService memberService;
+    private final TokenService tokenService;
 
     @PostMapping("")
     @Tag(name = "member")
@@ -124,6 +127,26 @@ public class MemberController {
             return remove;
         } catch (Exception e) {
             return "회원탈퇴 실패했습니다. :" + e.getMessage();
+        }
+    }
+
+    // accessToken 만료시 refreshToken으로 accessToken 발급
+    @GetMapping("/refresh")
+    @Tag(name = "member")
+    @Operation(summary = "access token 발급", description = "refresh token을 받으면 access token을 반환해줍니다.")
+    public ResponseEntity<?> refreshToken(@AuthenticationPrincipal UserDetails userDetails) throws Exception {
+        try {
+            String email = userDetails.getUsername();
+            log.info("이메일 : " + email);
+
+            if (email != null) {
+                ResponseEntity<TokenDTO> accessToken = tokenService.createAccessToken(email);
+                return ResponseEntity.ok().body(accessToken);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
