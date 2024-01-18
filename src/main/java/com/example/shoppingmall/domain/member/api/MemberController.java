@@ -2,6 +2,7 @@ package com.example.shoppingmall.domain.member.api;
 
 import com.example.shoppingmall.domain.member.application.MemberService;
 import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
+import com.example.shoppingmall.domain.member.dto.ResponseMemberDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 @Log4j2
@@ -38,6 +38,18 @@ public class MemberController {
         } catch (Exception e) {
             log.error("예외 : " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{memberId}")
+    @Tag(name = "member")
+    @Operation(summary = "회원 조회", description = "회원을 검색하는 API입니다.")
+    public ResponseEntity<?> search(@PathVariable Long memberId) {
+        try {
+            ResponseMemberDTO search = memberService.search(memberId);
+            return ResponseEntity.ok().body(search);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
