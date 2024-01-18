@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -70,5 +72,13 @@ public class MemberServiceImpl implements MemberService{
         } else {
             return false;
         }
+    }
+
+    // 회원 조회
+    @Override
+    public ResponseMemberDTO search(Long memberId) {
+        MemberEntity findUser = memberRepository.findById(memberId)
+                .orElseThrow(EntityNotFoundException::new);
+        return ResponseMemberDTO.changeDTO(findUser);
     }
 }
