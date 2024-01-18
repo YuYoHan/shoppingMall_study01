@@ -1,20 +1,30 @@
 package com.example.shoppingmall.domain.member.application;
 
+import com.example.shoppingmall.domain.jwt.dto.TokenDTO;
+import com.example.shoppingmall.domain.jwt.entity.TokenEntity;
 import com.example.shoppingmall.domain.jwt.repository.TokenRepository;
 import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
 import com.example.shoppingmall.domain.member.dto.ResponseMemberDTO;
 import com.example.shoppingmall.domain.member.entity.MemberEntity;
+import com.example.shoppingmall.domain.member.entity.Role;
 import com.example.shoppingmall.domain.member.exception.UserException;
 import com.example.shoppingmall.domain.member.repository.MemberRepository;
 import com.example.shoppingmall.global.config.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -77,8 +87,52 @@ public class MemberServiceImpl implements MemberService{
     // 회원 조회
     @Override
     public ResponseMemberDTO search(Long memberId) {
-        MemberEntity findUser = memberRepository.findById(memberId)
-                .orElseThrow(EntityNotFoundException::new);
-        return ResponseMemberDTO.changeDTO(findUser);
+        try {
+            MemberEntity findUser = memberRepository.findById(memberId)
+                    .orElseThrow(EntityNotFoundException::new);
+            return ResponseMemberDTO.changeDTO(findUser);
+        } catch (EntityNotFoundException e) {
+            log.error("에러 : " + e.getMessage());
+            throw new EntityNotFoundException("회원이 존재 하지 않습니다.");
+        }
+    }
+
+    // 로그인
+
+    @Override
+    public ResponseEntity<?> login(String memberEmail, String memberPw) {
+        try {
+            MemberEntity findUser = memberRepository.findByEmail(memberEmail);
+
+            if(findUser != null) {
+                if(passwordEncoder.matches(memberPw, findUser.getMemberPw())) {
+                    Authentication authentication =
+                            new UsernamePasswordAuthenticationToken(memberEmail, memberPw);
+                    List<GrantedAuthority> authoritiesForUser = getAuthoritiesForUser(findUser);
+
+                    TokenDTO token = jwtProvider.createToken(authentication, authoritiesForUser, findUser.getMemberId());
+                    TokenEntity findToken = tokenRepository.findByMemberEmail(token.getMemberEmail());
+                    TokenEntity tokenEntity;
+                    if(findToken == null) {
+                        tokenEntity = TokenEntity.changeEntity(token);
+                    } else {
+                        tokenEntity = TokenEntity.updateToken(findToken.getId(), token);
+                    }
+                    tokenRepository.save(tokenEntity);
+                    return ResponseEntity.ok().body(token);
+                }
+            }
+            throw new EntityNotFoundException("회원이 존재하지 않습니다.");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    // 회원의 권한을 GrantedAuthority타입으로 반환하는 메소드
+    private List<GrantedAuthority> getAuthoritiesForUser(MemberEntity member) {
+        Role memberRole = member.getMemberRole();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + memberRole.name()));
+        log.info("role : " + authorities);
+        return authorities;
     }
 }
