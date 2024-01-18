@@ -1,6 +1,7 @@
 package com.example.shoppingmall.domain.member.api;
 
 import com.example.shoppingmall.domain.member.application.MemberService;
+import com.example.shoppingmall.domain.member.dto.LoginDTO;
 import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
 import com.example.shoppingmall.domain.member.dto.ResponseMemberDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,6 +51,21 @@ public class MemberController {
             return ResponseEntity.ok().body(search);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // 로그인
+    @PostMapping("/login")
+    @Tag(name = "member")
+    @Operation(summary = "로그인 API", description = "로그인을 하면 JWT를 반환해줍니다.")
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+        try {
+            String email = loginDTO.getMemberEmail();
+            String password = loginDTO.getMemberPw();
+            ResponseEntity<?> login = memberService.login(email, password);
+            return ResponseEntity.ok().body(login);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인을 실패했습니다.");
         }
     }
 }
