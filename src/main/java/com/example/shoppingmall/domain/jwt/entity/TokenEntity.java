@@ -1,15 +1,12 @@
 package com.example.shoppingmall.domain.jwt.entity;
 
 import com.example.shoppingmall.domain.jwt.dto.TokenDTO;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity(name = "token")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
 public class TokenEntity {
@@ -49,7 +46,7 @@ public class TokenEntity {
     }
 
     // 토큰 업데이트
-    public TokenEntity updateToken(Long id, TokenDTO tokenDTO) {
+    public static TokenEntity updateToken(Long id, TokenDTO tokenDTO) {
         return TokenEntity.builder()
                 .id(id)
                 .grantType(tokenDTO.getGrantType())
