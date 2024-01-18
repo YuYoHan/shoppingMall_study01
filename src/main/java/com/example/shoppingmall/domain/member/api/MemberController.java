@@ -2,6 +2,7 @@ package com.example.shoppingmall.domain.member.api;
 
 import com.example.shoppingmall.domain.member.application.MemberService;
 import com.example.shoppingmall.domain.member.dto.LoginDTO;
+import com.example.shoppingmall.domain.member.dto.ModifyMemberDTO;
 import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
 import com.example.shoppingmall.domain.member.dto.ResponseMemberDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +70,25 @@ public class MemberController {
             return ResponseEntity.ok().body(login);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인을 실패했습니다.");
+        }
+    }
+
+    // 회원 수정
+    @PutMapping("/{memberId}")
+    @Tag(name = "member")
+    @Operation(summary = "수정 API", description = "유저 정보를 수정하는 API입니다.")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> update(@PathVariable Long memberId,
+                                    @Validated @RequestBody ModifyMemberDTO modifyMemberDTO,
+                                    @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            String email = userDetails.getUsername();
+            log.info("email : " + email);
+            log.info("비밀번호 체크 : " + modifyMemberDTO.getMemberPw());
+            ResponseEntity<?> responseEntity = memberService.updateUser(memberId, modifyMemberDTO, email);
+            return ResponseEntity.ok().body(responseEntity);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

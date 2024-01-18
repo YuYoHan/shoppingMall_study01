@@ -1,5 +1,6 @@
 package com.example.shoppingmall.domain.member.application;
 
+import com.example.shoppingmall.domain.member.dto.ModifyMemberDTO;
 import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
 import com.example.shoppingmall.domain.member.dto.ResponseMemberDTO;
 import org.springframework.http.ResponseEntity;

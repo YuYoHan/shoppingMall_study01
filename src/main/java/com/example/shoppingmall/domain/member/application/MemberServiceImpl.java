@@ -3,6 +3,7 @@ package com.example.shoppingmall.domain.member.application;
 import com.example.shoppingmall.domain.jwt.dto.TokenDTO;
 import com.example.shoppingmall.domain.jwt.entity.TokenEntity;
 import com.example.shoppingmall.domain.jwt.repository.TokenRepository;
+import com.example.shoppingmall.domain.member.dto.ModifyMemberDTO;
 import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
 import com.example.shoppingmall.domain.member.dto.ResponseMemberDTO;
 import com.example.shoppingmall.domain.member.entity.MemberEntity;
@@ -134,5 +135,36 @@ public class MemberServiceImpl implements MemberService{
         authorities.add(new SimpleGrantedAuthority("ROLE_" + memberRole.name()));
         log.info("role : " + authorities);
         return authorities;
+    }
+
+    // 회원 정보 수정
+
+    @Override
+    public ResponseEntity<?> updateUser(Long memberId, ModifyMemberDTO modifyMemberDTO, String memberEmail) {
+        try {
+            // 회원조회
+            MemberEntity findUser = memberRepository.findByEmail(memberEmail);
+            log.info("user : " + findUser);
+
+            // 닉네임 중복 체크
+            if (!nickNameCheck(modifyMemberDTO.getNickName())) {
+                throw new UserException("이미 존재하는 닉네임이 있습니다.");
+            }
+            String encodePw = passwordEncoder.encode(modifyMemberDTO.getMemberPw());
+
+            if (findUser.getMemberId().equals(memberId)) {
+                findUser.updateMember(modifyMemberDTO, encodePw);
+                log.info("유저 수정 : " + findUser);
+
+                MemberEntity updateUser = memberRepository.save(findUser);
+                ResponseMemberDTO toResponseMemberDTO = ResponseMemberDTO.changeDTO(updateUser);
+                return ResponseEntity.ok().body(toResponseMemberDTO);
+            } else {
+                throw new UserException("회원 정보가 일치 하지 않습니다.");
+            }
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

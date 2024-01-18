@@ -1,5 +1,6 @@
 package com.example.shoppingmall.domain.member.entity;
 
+import com.example.shoppingmall.domain.member.dto.ModifyMemberDTO;
 import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
 import lombok.*;
 
@@ -75,12 +76,10 @@ public class MemberEntity {
                 .memberId(this.memberId)
                 .email(this.email)
                 .memberPw(updateMember.getMemberPw() == null
-                        ? this.memberPw
-                        : encodePw)
+                        ? this.memberPw : encodePw)
                 .nickName(updateMember.getNickName() == null
                         ? this.getNickName() : updateMember.getNickName())
                 .memberRole(this.memberRole)
-                .memberPoint(this.memberPoint)
                 .memberName(this.memberName)
                 .address(AddressEntity.builder()
                         .memberAddr(updateMember.getMemberAddress().getMemberAddr() == null
