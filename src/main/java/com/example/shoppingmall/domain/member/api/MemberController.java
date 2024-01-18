@@ -91,4 +91,39 @@ public class MemberController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // 중복체크
+    @GetMapping("/email/{memberEmail}")
+    @Tag(name = "member")
+    @Operation(summary = "중복체크 API", description = "userEmail이 중복인지 체크하는 API입니다.")
+    public boolean emailCheck(@PathVariable String memberEmail) {
+        log.info("email : " + memberEmail);
+        return memberService.emailCheck(memberEmail);
+    }
+
+    // 닉네임 조회
+    @GetMapping("/nickName/{nickName}")
+    @Tag(name = "member")
+    @Operation(summary = "닉네임 조회", description = "중복된 닉네임이 있는지 확인하는 API입니다.")
+    public boolean nickNameCheck(@PathVariable String nickName) {
+        log.info("nickName : " + nickName);
+        return memberService.nickNameCheck(nickName);
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/{memberId}")
+    @Tag(name = "member")
+    @Operation(summary = "삭제 API", description = "유저를 삭제하는 API입니다.")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public String remove(@PathVariable Long memberId,
+                         @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            String email = userDetails.getUsername();
+            log.info("email : " + email);
+            String remove = memberService.removeUser(memberId, email);
+            return remove;
+        } catch (Exception e) {
+            return "회원탈퇴 실패했습니다. :" + e.getMessage();
+        }
+    }
 }

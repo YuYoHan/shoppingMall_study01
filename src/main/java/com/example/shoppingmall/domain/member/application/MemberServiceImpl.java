@@ -167,4 +167,20 @@ public class MemberServiceImpl implements MemberService{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+    // 회원 삭제
+    @Override
+    public String removeUser(Long memberId, String email) {
+        // 회원 조회
+        MemberEntity findUser = memberRepository.findByEmail(email);
+        log.info("email check : " + email);
+        log.info("email check2 : " + findUser.getEmail());
+
+        // 회원이 비어있지 않고 넘어온 id가 DB에 등록된 id가 일치할 때
+        if (findUser.getMemberId().equals(memberId)) {
+            memberRepository.deleteByMemberId(memberId);
+            return "회원 탈퇴 완료";
+        } else {
+            return "해당 유저가 아니라 삭제할 수 없습니다.";
+        }
+    }
 }
