@@ -1,5 +1,6 @@
 package com.example.shoppingmall.domain.member.entity;
 
+import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -49,6 +50,24 @@ public class MemberEntity {
         this.nickName = nickName;
         this.memberRole = memberRole;
         this.address = address;
+    }
+
+    // 저장
+    public static MemberEntity saveMember(RequestMemberDTO member, String password) {
+        return MemberEntity.builder()
+                .email(member.getEmail())
+                .memberPw(password)
+                .memberName(member.getMemberName())
+                .nickName(member.getNickName())
+                .memberRole(Role.USER)
+                .address(AddressEntity.builder()
+                        .memberAddr(member.getMemberAddress().getMemberAddr() == null
+                                ? null : member.getMemberAddress().getMemberAddr())
+                        .memberAddrDetail(member.getMemberAddress().getMemberAddrDetail() == null
+                                ? null : member.getMemberAddress().getMemberAddrDetail())
+                        .memberZipCode(member.getMemberAddress().getMemberZipCode() == null
+                                ? null : member.getMemberAddress().getMemberZipCode())
+                        .build()).build();
     }
 
     public void updateMember(ModifyMemberDTO updateMember, String encodePw) {
