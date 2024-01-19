@@ -1,5 +1,7 @@
 package com.example.shoppingmall.domain.member.entity;
 
+import com.example.shoppingmall.domain.member.dto.ModifyMemberDTO;
+import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -51,17 +53,33 @@ public class MemberEntity {
         this.address = address;
     }
 
+    // 저장
+    public static MemberEntity saveMember(RequestMemberDTO member, String password) {
+        return MemberEntity.builder()
+                .email(member.getEmail())
+                .memberPw(password)
+                .memberName(member.getMemberName())
+                .nickName(member.getNickName())
+                .memberRole(Role.USER)
+                .address(AddressEntity.builder()
+                        .memberAddr(member.getMemberAddress().getMemberAddr() == null
+                                ? null : member.getMemberAddress().getMemberAddr())
+                        .memberAddrDetail(member.getMemberAddress().getMemberAddrDetail() == null
+                                ? null : member.getMemberAddress().getMemberAddrDetail())
+                        .memberZipCode(member.getMemberAddress().getMemberZipCode() == null
+                                ? null : member.getMemberAddress().getMemberZipCode())
+                        .build()).build();
+    }
+
     public void updateMember(ModifyMemberDTO updateMember, String encodePw) {
         MemberEntity.builder()
                 .memberId(this.memberId)
                 .email(this.email)
                 .memberPw(updateMember.getMemberPw() == null
-                        ? this.memberPw
-                        : encodePw)
+                        ? this.memberPw : encodePw)
                 .nickName(updateMember.getNickName() == null
                         ? this.getNickName() : updateMember.getNickName())
                 .memberRole(this.memberRole)
-                .memberPoint(this.memberPoint)
                 .memberName(this.memberName)
                 .address(AddressEntity.builder()
                         .memberAddr(updateMember.getMemberAddress().getMemberAddr() == null

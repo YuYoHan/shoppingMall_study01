@@ -1,5 +1,6 @@
 package com.example.shoppingmall.domain.member.entity;
 
+import com.example.shoppingmall.domain.member.dto.ModifyMemberDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -60,7 +61,6 @@ public class SocialMemberEntity {
                 .nickName(updateMember.getNickName() == null
                         ? this.getNickName() : updateMember.getNickName())
                 .memberRole(this.memberRole)
-                .memberPoint(this.memberPoint)
                 .memberName(this.memberName)
                 .address(AddressEntity.builder()
                         .memberAddr(updateMember.getMemberAddress().getMemberAddr() == null
