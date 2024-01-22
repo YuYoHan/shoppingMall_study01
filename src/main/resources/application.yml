@@ -9,13 +9,17 @@ spring:
         - mail
       prod:
         - prod
-#    active: local
-    active: ${profile}
+    active: local
+#    active: ${profile}
   devtools:
     livereload:
       enabled: true
   restart:
     enabled: true
+
+---
+server:
+  port: 9090
 
 
 
