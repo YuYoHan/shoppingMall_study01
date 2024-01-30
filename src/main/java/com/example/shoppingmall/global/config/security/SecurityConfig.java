@@ -7,6 +7,7 @@ import com.example.shoppingmall.global.config.OAuth2.OAuth2SuccessHandler;
 import com.example.shoppingmall.global.config.OAuth2.PrincipalOAuth2UserService;
 import com.example.shoppingmall.global.config.jwt.JwtProvider;
 import com.example.shoppingmall.global.config.jwt.JwtSecurityConfig;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +58,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.DELETE, "/api/v1/users/{memberId}")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers("/api/v1/users/**").permitAll()
-                .antMatchers("/api/v1/{itemId}/boards/**")
+                .antMatchers("/api/v1/boards/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers(HttpMethod.PUT, "/api/v1/boards/{boardId}")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
@@ -64,27 +66,27 @@ public class SecurityConfig {
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/boards/{boardId}")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/api/v1/{itemId}/boards/{boardId}/comments/**")
-                .access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/api/v1/{boardId}/comments/**")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers("/api/v1/items/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/items")
-                .access("hasRole('ROLE_ADMIN')")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers(HttpMethod.PUT, "/api/v1/items/{itemId}")
-                .access("hasRole('ROLE_ADMIN')")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/items/{itemId}")
-                .access("hasRole('ROLE_ADMIN')")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers(HttpMethod.POST, "/api/v1/admins").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/admins/mails").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/admins/verifications").permitAll()
-                .antMatchers("/api/v1/cart")
+                .antMatchers("/api/v1/carts")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/api/v1/cart/**")
+                .antMatchers("/api/v1/carts/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers(HttpMethod.POST, "/api/v1/cart")
+                .antMatchers(HttpMethod.POST, "/api/v1/carts")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers(HttpMethod.POST, "/api/v1/cart/**")
+                .antMatchers(HttpMethod.POST, "/api/v1/carts/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers(HttpMethod.PUT, "/api/v1/cart/**")
+                .antMatchers(HttpMethod.PUT, "/api/v1/carts/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers("/api/v1/admins/**")
                 .access("hasRole('ROLE_ADMIN')")
@@ -120,5 +122,10 @@ public class SecurityConfig {
         Map<String, PasswordEncoder> encoder = new HashMap<>();
         encoder.put(idForEncode, new BCryptPasswordEncoder());
         return new DelegatingPasswordEncoder(idForEncode, encoder);
+    }
+
+    @Bean
+    JPAQueryFactory jpaQueryFactory(EntityManager em) {
+        return new JPAQueryFactory(em);
     }
 }
