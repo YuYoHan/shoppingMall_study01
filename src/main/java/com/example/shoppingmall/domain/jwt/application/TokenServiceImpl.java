@@ -29,31 +29,35 @@ public class TokenServiceImpl implements TokenService{
     private final MemberRepository memberRepository;
 
     @Override
-    public ResponseEntity<TokenDTO> createAccessToken(String email) {
-        // 토큰 조회
-        TokenEntity findToken = tokenRepository.findByMemberEmail(email);
-        log.info("토큰 : " + findToken);
-        // 유저 조회
-        MemberEntity findUser = memberRepository.findByEmail(email);
-        log.info("유저 : " + findUser);
+    public ResponseEntity<?> createAccessToken(String email) {
+        try {
+            // 토큰 조회
+            TokenEntity findToken = tokenRepository.findByMemberEmail(email);
+            log.info("토큰 : " + findToken);
+            // 유저 조회
+            MemberEntity findUser = memberRepository.findByEmail(email);
+            log.info("유저 : " + findUser);
 
-        // refreshToken 2차 검증
-        if (jwtProvider.validateToken(findToken.getRefreshToken())) {
-            // 권한 가져오기
-            List<GrantedAuthority> authorities = getAuthoritiesForUser(findUser);
-            // 토큰 생성
-            TokenDTO accessToken = jwtProvider.createAccessToken(findUser.getEmail(), authorities);
-            log.info("accessToken : " + accessToken);
+            // refreshToken 2차 검증
+            if (jwtProvider.validateToken(findToken.getRefreshToken())) {
+                // 권한 가져오기
+                List<GrantedAuthority> authorities = getAuthoritiesForUser(findUser);
+                // 토큰 생성
+                TokenDTO accessToken = jwtProvider.createAccessToken(findUser.getEmail(), authorities);
+                log.info("accessToken : " + accessToken);
 
-            findToken = TokenEntity.updateToken(findToken.getId(), accessToken);
+                findToken = TokenEntity.updateToken(findToken.getId(), accessToken);
 
-            log.info("token : " + findToken);
-            TokenEntity saveToken = tokenRepository.save(findToken);
-            TokenDTO returnToken = TokenDTO.changeDTO(saveToken);
+                log.info("token : " + findToken);
+                TokenEntity saveToken = tokenRepository.save(findToken);
+                TokenDTO returnToken = TokenDTO.changeDTO(saveToken);
 
-            return new ResponseEntity<>(returnToken, HttpStatus.OK);
-        } else {
-            throw new IllegalArgumentException("Unexpected token");
+                return new ResponseEntity<>(returnToken, HttpStatus.OK);
+            } else {
+                throw new IllegalArgumentException("Unexpected token");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
