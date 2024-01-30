@@ -1,14 +1,11 @@
 package com.example.shoppingmall.domain.member.api;
 
 import com.example.shoppingmall.domain.jwt.application.TokenService;
-import com.example.shoppingmall.domain.jwt.dto.TokenDTO;
 import com.example.shoppingmall.domain.member.application.MemberService;
 import com.example.shoppingmall.domain.member.dto.LoginDTO;
 import com.example.shoppingmall.domain.member.dto.ModifyMemberDTO;
 import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
 import com.example.shoppingmall.domain.member.dto.ResponseMemberDTO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -26,14 +23,11 @@ import javax.persistence.EntityNotFoundException;
 @Log4j2
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
-@Tag(name = "member", description = "유저 API")
 public class MemberController {
     private final MemberService memberService;
     private final TokenService tokenService;
 
     @PostMapping("")
-    @Tag(name = "member")
-    @Operation(summary = "회원가입", description = "회원가입하는 API입니다")
     public ResponseEntity<?> join(@Validated @RequestBody RequestMemberDTO member,
                                   BindingResult result) {
         try {
@@ -50,8 +44,6 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    @Tag(name = "member")
-    @Operation(summary = "회원 조회", description = "회원을 검색하는 API입니다.")
     public ResponseEntity<?> search(@PathVariable Long memberId) {
         try {
             ResponseMemberDTO search = memberService.search(memberId);
@@ -63,8 +55,6 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/login")
-    @Tag(name = "member")
-    @Operation(summary = "로그인 API", description = "로그인을 하면 JWT를 반환해줍니다.")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         try {
             String email = loginDTO.getMemberEmail();
@@ -78,8 +68,6 @@ public class MemberController {
 
     // 회원 수정
     @PutMapping("/{memberId}")
-    @Tag(name = "member")
-    @Operation(summary = "수정 API", description = "유저 정보를 수정하는 API입니다.")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> update(@PathVariable Long memberId,
                                     @Validated @RequestBody ModifyMemberDTO modifyMemberDTO,
@@ -97,8 +85,6 @@ public class MemberController {
 
     // 중복체크
     @GetMapping("/email/{memberEmail}")
-    @Tag(name = "member")
-    @Operation(summary = "중복체크 API", description = "userEmail이 중복인지 체크하는 API입니다.")
     public boolean emailCheck(@PathVariable String memberEmail) {
         log.info("email : " + memberEmail);
         return memberService.emailCheck(memberEmail);
@@ -106,8 +92,6 @@ public class MemberController {
 
     // 닉네임 조회
     @GetMapping("/nickName/{nickName}")
-    @Tag(name = "member")
-    @Operation(summary = "닉네임 조회", description = "중복된 닉네임이 있는지 확인하는 API입니다.")
     public boolean nickNameCheck(@PathVariable String nickName) {
         log.info("nickName : " + nickName);
         return memberService.nickNameCheck(nickName);
@@ -115,8 +99,6 @@ public class MemberController {
 
     // 회원 탈퇴
     @DeleteMapping("/{memberId}")
-    @Tag(name = "member")
-    @Operation(summary = "삭제 API", description = "유저를 삭제하는 API입니다.")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String remove(@PathVariable Long memberId,
                          @AuthenticationPrincipal UserDetails userDetails) {
@@ -132,21 +114,15 @@ public class MemberController {
 
     // accessToken 만료시 refreshToken으로 accessToken 발급
     @GetMapping("/refresh")
-    @Tag(name = "member")
-    @Operation(summary = "access token 발급", description = "refresh token을 받으면 access token을 반환해줍니다.")
     public ResponseEntity<?> refreshToken(@AuthenticationPrincipal UserDetails userDetails) throws Exception {
         try {
             String email = userDetails.getUsername();
             log.info("이메일 : " + email);
-
-            if (email != null) {
-                ResponseEntity<TokenDTO> accessToken = tokenService.createAccessToken(email);
-                return ResponseEntity.ok().body(accessToken);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            ResponseEntity<?> accessToken = tokenService.createAccessToken(email);
+            return ResponseEntity.ok().body(accessToken);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 }
