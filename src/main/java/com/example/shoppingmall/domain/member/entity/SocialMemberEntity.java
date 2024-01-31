@@ -5,7 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity(name = "member")
+@Entity(name = "social")
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

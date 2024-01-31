@@ -1,5 +1,7 @@
 package com.example.shoppingmall.domain.member.application;
 
+import com.example.shoppingmall.domain.cart.entity.CartEntity;
+import com.example.shoppingmall.domain.cart.repository.CartRepository;
 import com.example.shoppingmall.domain.jwt.dto.TokenDTO;
 import com.example.shoppingmall.domain.jwt.entity.TokenEntity;
 import com.example.shoppingmall.domain.jwt.repository.TokenRepository;
@@ -36,6 +38,7 @@ public class MemberServiceImpl implements MemberService{
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final TokenRepository tokenRepository;
+    private final CartRepository cartRepository;
 
 
     @Override
@@ -56,6 +59,14 @@ public class MemberServiceImpl implements MemberService{
             MemberEntity saveMember = MemberEntity.saveMember(member, encodePw);
             log.info("유저 : " + saveMember);
             MemberEntity save = memberRepository.save(saveMember);
+
+            // 장바구니 조회
+            CartEntity findCart = cartRepository.findByMemberMemberId(save.getMemberId());
+            if(findCart == null) {
+                // 장바구니 생성
+                CartEntity saveCart = CartEntity.saveCart(save);
+                cartRepository.save(saveCart);
+            }
             return ResponseEntity.ok().body(ResponseMemberDTO.changeDTO(save));
         } catch (Exception e) {
             log.error("에러 발생 : " + e.getMessage());
