@@ -6,8 +6,12 @@ import com.example.shoppingmall.domain.member.dto.LoginDTO;
 import com.example.shoppingmall.domain.member.dto.ModifyMemberDTO;
 import com.example.shoppingmall.domain.member.dto.RequestMemberDTO;
 import com.example.shoppingmall.domain.member.dto.ResponseMemberDTO;
+import com.example.shoppingmall.domain.order.application.OrderService;
+import com.example.shoppingmall.domain.order.dto.ResponseOrderItemDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +22,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @Log4j2
@@ -26,6 +32,7 @@ import javax.persistence.EntityNotFoundException;
 public class MemberController {
     private final MemberService memberService;
     private final TokenService tokenService;
+    private final OrderService orderService;
 
     @PostMapping("")
     public ResponseEntity<?> join(@Validated @RequestBody RequestMemberDTO member,
@@ -122,6 +129,36 @@ public class MemberController {
             return ResponseEntity.ok().body(accessToken);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // 주문 조회
+    @GetMapping(value = "/orders")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> getOrders(Pageable pageable,
+                                       @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            Page<ResponseOrderItemDTO> ordersPage = orderService.getOrders(pageable, userDetails);
+            Map<String, Object> response = new HashMap<>();
+            // 현재 페이지의 아이템 목록
+            response.put("items", ordersPage.getContent());
+            // 현재 페이지 번호
+            response.put("nowPageNumber", ordersPage.getNumber()+1);
+            // 전체 페이지 수
+            response.put("totalPage", ordersPage.getTotalPages());
+            // 한 페이지에 출력되는 데이터 개수
+            response.put("pageSize", ordersPage.getSize());
+            // 다음 페이지 존재 여부
+            response.put("hasNextPage", ordersPage.hasNext());
+            // 이전 페이지 존재 여부
+            response.put("hasPreviousPage", ordersPage.hasPrevious());
+            // 첫 번째 페이지 여부
+            response.put("isFirstPage", ordersPage.isFirst());
+            // 마지막 페이지 여부
+            response.put("isLastPage", ordersPage.isLast());
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
