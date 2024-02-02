@@ -63,7 +63,7 @@ public class OrderService {
             // 구매하려는 상품템리스트
             List<ResponseOrderDTO> itemList = new ArrayList<>();
             ItemEntity findItem = null;
-            CartItemEntity findCartItem = null;
+            CartItemEntity findCartItem;
 
             if (authority.equals("ROLE_ADMIN")) {
                 for (RequestOrderDTO order : orderDTOList) {
@@ -127,9 +127,9 @@ public class OrderService {
                 .collect(Collectors.toList());
 
         if (Objects.requireNonNull(findItem).getStockNumber() == 0) {
-            itemRepository.updateCartItemsStatus(ItemSellStatus.SOLD_OUT, collect);
+            itemRepository.updateItemsStatus(ItemSellStatus.SOLD_OUT, collect);
         } else if (findItem.getStockNumber() > 0) {
-            itemRepository.updateCartItemsStatus(ItemSellStatus.SELL, collect);
+            itemRepository.updateItemsStatus(ItemSellStatus.SELL, collect);
         }
 
         // 장바구니 상품 상태 변경

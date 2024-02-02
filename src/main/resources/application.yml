@@ -17,9 +17,6 @@ spring:
   restart:
     enabled: true
 
----
-server:
-  port: 9090
 
 
 

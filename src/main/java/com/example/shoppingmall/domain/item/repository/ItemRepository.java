@@ -16,6 +16,6 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query("update item i set i.itemSellStatus = :newStatus where i.itemId in :itemIds")
-    void updateCartItemsStatus(@Param("newStatus") ItemSellStatus newStatus,
-                                               @Param("cartItemIds") List<Long> itemIds);
+    void updateItemsStatus(@Param("newStatus") ItemSellStatus newStatus,
+                                               @Param("itemIds") List<Long> itemIds);
 }
