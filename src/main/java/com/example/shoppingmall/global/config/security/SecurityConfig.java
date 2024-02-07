@@ -53,6 +53,8 @@ public class SecurityConfig {
         http
                 // 인증절차에 대한 설정
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/v1/users")
+                .permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/v1/users")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/users/{memberId}")

@@ -10,6 +10,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity(name = "item")
 @Getter
@@ -73,20 +74,11 @@ public class ItemEntity extends BaseEntity {
         this.itemImgList.add(itemImg);
     }
 
-    public ItemEntity updateItem(UpdateItemDTO item) {
-        return ItemEntity.builder()
-                .itemId(this.itemId)
-                .itemName(item.getItemName())
-                .itemDetail(item.getItemDetail())
-                .itemPlace(this.itemPlace)
-                .itemSellStatus(this.itemSellStatus)
-                .stockNumber(item.getStockNumber())
-                .price(item.getPrice())
-                .itemRamount(this.itemRamount)
-                .member(this.member)
-                .itemReserver(this.itemReserver == null ? null : this.itemReserver)
-                .itemImgList(this.itemImgList)
-                .build();
+    public void updateItem(UpdateItemDTO item) {
+        this.itemName = Optional.ofNullable(item.getItemName()).orElse(this.getItemName());
+        this.itemDetail = Optional.ofNullable(item.getItemDetail()).orElse(this.getItemDetail());
+        this.stockNumber = Optional.of(item.getStockNumber()).orElse(this.stockNumber);
+        this.price = Optional.of(item.getPrice()).orElse(this.price);
     }
 
     // 상태만 바꿔주는 메소드
