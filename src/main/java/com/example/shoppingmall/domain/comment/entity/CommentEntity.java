@@ -92,15 +92,8 @@ public class CommentEntity extends BaseEntity {
 
 
     // 수정
-    public CommentEntity updateComment(ModifyCommentDTO commentDTO) {
-        return CommentEntity.builder()
-                .commentId(this.commentId)
-                .comment(commentDTO.getComment())
-                .member(this.member)
-                .board(this.board)
-                .secret(this.secret)
-                .isReply(this.isReply)
-                .build();
+    public void updateComment(ModifyCommentDTO commentDTO) {
+        this.comment = commentDTO.getComment() != null ? commentDTO.getComment() : this.comment;
     }
 
     // 부모 댓글 수정

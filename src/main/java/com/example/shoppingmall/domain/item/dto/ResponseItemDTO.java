@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,8 @@ public class ResponseItemDTO {
 
     public static ResponseItemDTO changeDTO(ItemEntity item) {
         // 이미지 처리
-        List<ItemImgEntity> itemImgList = item.getItemImgList();
+        List<ItemImgEntity> itemImgList =
+                item.getItemImgList() != null ? item.getItemImgList() : Collections.emptyList();
         List<ItemImgDTO> itemImgDTOList = itemImgList.stream()
                 .map(ItemImgDTO::changeDTO)
                 .collect(Collectors.toList());

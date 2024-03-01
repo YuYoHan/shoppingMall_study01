@@ -130,8 +130,8 @@ public class CommentServiceImpl implements CommentService{
 
             if(equalsEmail && equalsId) {
                 // 댓글 수정
-                CommentEntity commentEntity = findComment.updateComment(commentDTO);
-                CommentEntity save = commentRepository.save(commentEntity);
+                findComment.updateComment(commentDTO);
+                CommentEntity save = commentRepository.save(findComment);
                 CommentDTO returnComment = CommentDTO.changeDTO(save);
                 return ResponseEntity.ok().body(returnComment);
             }

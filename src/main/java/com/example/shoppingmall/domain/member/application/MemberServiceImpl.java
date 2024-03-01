@@ -49,7 +49,7 @@ public class MemberServiceImpl implements MemberService{
             log.info("nickName : " + member.getNickName());
 
             if(!emailCheck(member.getEmail())) {
-                throw new UserException("이미 존재하는 이미엘이 있습니다.");
+                throw new UserException("이미 존재하는 이메일이 있습니다.");
             }
 
             if(!nickNameCheck(member.getNickName())) {
@@ -64,8 +64,9 @@ public class MemberServiceImpl implements MemberService{
             CartEntity findCart = cartRepository.findByMemberMemberId(save.getMemberId());
             if(findCart == null) {
                 // 장바구니 생성
-                CartEntity saveCart = CartEntity.saveCart(save);
-                cartRepository.save(saveCart);
+                CartEntity cart = CartEntity.saveCart(save);
+                CartEntity saveCart = cartRepository.save(cart);
+                log.info("장바구니 : " + saveCart);
             }
             return ResponseEntity.ok().body(ResponseMemberDTO.changeDTO(save));
         } catch (Exception e) {

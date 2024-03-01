@@ -79,18 +79,15 @@ public class BoardEntity extends BaseEntity {
     }
 
     public void updateBoard(CreateBoardDTO boardDTO) {
-         BoardEntity.builder()
-                .boardId(this.boardId)
-                .title(boardDTO.getTitle() != null ?
-                        boardDTO.getTitle() : this.title)
-                .content(boardDTO.getContent() != null ?
-                        boardDTO.getContent() : this.content)
-                .member(this.member)
-                .commentEntityList(this.commentEntityList)
-                .boardSecret(this.boardSecret)
-                .build();
+        this.title = boardDTO.getTitle() != null ? boardDTO.getTitle() : this.title;
+        this.content = boardDTO.getContent() != null ? boardDTO.getContent() : this.content;
     }
 
+    // 댓글 존재여부에 따라 상태 변화
+    public void replyCheck() {
+        // 댓글이 없으면 답변 미완료, 있으면 완료
+        this.replyStatus = this.getCommentEntityList().isEmpty() ? ReplyStatus.REPLY_X : ReplyStatus.REPLY_O;
+    }
     // 답장 상태 변화
     public void changeReply(ReplyStatus replyStatus) {
         this.replyStatus = replyStatus;

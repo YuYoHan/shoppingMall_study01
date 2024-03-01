@@ -11,7 +11,8 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
@@ -72,22 +73,18 @@ public class MemberEntity {
     }
 
     public void updateMember(ModifyMemberDTO updateMember, String encodePw) {
-        MemberEntity.builder()
-                .memberId(this.memberId)
-                .email(this.email)
-                .memberPw(updateMember.getMemberPw() == null
-                        ? this.memberPw : encodePw)
-                .nickName(updateMember.getNickName() == null
-                        ? this.getNickName() : updateMember.getNickName())
-                .memberRole(this.memberRole)
-                .memberName(this.memberName)
-                .address(AddressEntity.builder()
-                        .memberAddr(updateMember.getMemberAddress().getMemberAddr() == null
-                                ? this.address.getMemberAddr() : updateMember.getMemberAddress().getMemberAddr())
-                        .memberAddrDetail(updateMember.getMemberAddress().getMemberAddrDetail() == null
-                                ? this.address.getMemberAddrDetail() : updateMember.getMemberAddress().getMemberAddrDetail())
-                        .memberZipCode(updateMember.getMemberAddress().getMemberZipCode() == null
-                                ? this.address.getMemberZipCode() : updateMember.getMemberAddress().getMemberZipCode())
-                        .build()).build();
+        this.memberPw = updateMember.getMemberPw() == null ? this.memberPw : encodePw;
+        this.nickName = updateMember.getNickName() == null ? this.nickName : updateMember.getNickName();
+
+        // 기존 주소 엔티티를 직접 수정
+        if (updateMember.getMemberAddress() != null) {
+            this.address = AddressEntity.builder()
+                    .memberAddr(updateMember.getMemberAddress().getMemberAddr())
+                    .memberAddrDetail(updateMember.getMemberAddress().getMemberAddrDetail())
+                    .memberZipCode(updateMember.getMemberAddress().getMemberZipCode())
+                    .build();
+        } else {
+            this.address = null;
+        }
     }
 }
